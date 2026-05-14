@@ -1,16 +1,128 @@
-# React + Vite
+# R4 Hub 🚀
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+R4 Hub is a personal developer resource management platform designed to help developers organize, save, search, and quickly access technical tools, websites, and learning resources in one place.
 
-Currently, two official plugins are available:
+As developers continue discovering new AI tools, platforms, documentation websites, deployment services, databases, and experiments, browser tabs and pinned pages quickly become difficult to manage.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+R4 Hub solves that problem by creating a centralized personal hub for storing and organizing developer resources.
 
-## React Compiler
+Live Demo: https://r4-hub.vercel.app/
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+GitHub Repository: https://github.com/keithowino/r4-hub
 
-## Expanding the ESLint configuration
+Portfolio: https://pickaxe-and-shovel.vercel.app
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## Preview
+
+Add a screenshot or thumbnail here later:
+
+![R4 Hub Preview](https://raw.githubusercontent.com/keithowino/r4-hub/refs/heads/main/client/public/Screenshot%202026-05-14%20104807.png)
+
+---
+
+## Features
+
+Current features:
+
+- Add resources
+- Categorize resources
+- Add tags
+- Search resources
+- Add notes
+- Delete resources
+- Copy resource URLs
+- Automatic persistence with Local Storage
+- Responsive interface
+- Resource grouping by categories
+
+Planned features:
+
+- Edit resources
+- Firebase synchronization
+- Import/export resources
+- Quick launcher (Ctrl + K)
+- Resource analytics
+- Collections
+- Prompt vault
+- Screenshots/thumbnails
+- Cloud backup
+
+---
+
+## Tech Stack
+
+Frontend:
+
+- React
+- Vite
+- Tailwind CSS
+- React Router
+- React Toastify
+- Lucide React
+
+Storage:
+
+- Local Storage
+- Firebase (planned)
+
+Deployment:
+
+- Vercel
+
+---
+
+## Project Structure
+
+```bash
+src/
+
+├── components/
+│ ├── home/
+│ └── modals/
+│
+├── pages/
+│
+├── lib/
+│ ├── context/
+│ ├── services/
+│ └── firebase/
+│
+├── App.jsx
+└── main.jsx
+```
+
+---
+
+## Getting Started
+
+### 1. Fork the repository
+
+Forking creates your own copy of the project under your GitHub account.
+
+Steps:
+
+1. Visit:
+
+https://github.com/keithowino/r4-hub
+
+2. Click the Fork button at the top-right corner.
+
+3. Select your GitHub account.
+
+4. GitHub creates:
+
+https://github.com/YOUR_USERNAME/r4-hub
+
+You now own your own copy.
+
+---
+
+### 2. Clone the repository
+
+Open VS Code terminal and run:
+
+```bash
+git clone https://github.com/YOUR_USERNAME/r4-hub.git
+```

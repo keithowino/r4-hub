@@ -18,7 +18,7 @@ Portfolio: https://pickaxe-and-shovel.vercel.app
 
 Add a screenshot or thumbnail here later:
 
-![R4 Hub Preview](https://raw.githubusercontent.com/keithowino/r4-hub/refs/heads/main/client/public/Screenshot%202026-05-14%20104807.png)
+![R4 Hub Preview](./preview.png)
 
 ---
 
@@ -79,17 +79,29 @@ Deployment:
 src/
 
 ├── components/
+
 │ ├── home/
+
 │ └── modals/
+
 │
+
 ├── pages/
+
 │
+
 ├── lib/
+
 │ ├── context/
+
 │ ├── services/
+
 │ └── firebase/
+
 │
+
 ├── App.jsx
+
 └── main.jsx
 ```
 
@@ -126,3 +138,341 @@ Open VS Code terminal and run:
 ```bash
 git clone https://github.com/YOUR_USERNAME/r4-hub.git
 ```
+
+Move into the project:
+
+```bash
+cd r4-hub
+```
+
+Open project:
+
+```bash
+code .
+```
+
+---
+
+### 3. Install dependencies
+
+Install packages:
+
+```bash
+npm install
+```
+
+or:
+
+```bash
+npm i
+```
+
+This installs dependencies from package.json.
+
+Examples:
+
+- React
+- React Router
+- React Toastify
+- Lucide React
+- UUID
+- Tailwind
+
+---
+
+### 4. Start development server
+
+```bash
+npm run dev
+```
+
+Vite starts:
+
+```bash
+http://localhost:5173
+```
+
+---
+
+## Firebase Setup
+
+Firebase is intended for synchronization and cloud backup.
+
+### Step 1
+
+Visit:
+
+[https://console.firebase.google.com](https://console.firebase.google.com)
+
+---
+
+### Step 2
+
+Click:
+
+Create Project
+
+Example:
+
+```text
+r4-hub
+```
+
+Continue setup.
+
+---
+
+### Step 3
+
+Enable Firestore Database
+
+Inside Firebase dashboard:
+
+Build
+
+→ Firestore Database
+
+→ Create Database
+
+Choose:
+
+```text
+Start in test mode
+```
+
+Select a region.
+
+---
+
+### Step 4
+
+Register web app
+
+Inside Firebase:
+
+Project Settings
+
+↓
+
+General
+
+↓
+
+Your Apps
+
+↓
+
+Web icon </>
+
+Name:
+
+```text
+r4-hub
+```
+
+Firebase generates:
+
+```js
+const firebaseConfig = {
+	apiKey: "",
+	authDomain: "",
+	projectId: "",
+	storageBucket: "",
+	messagingSenderId: "",
+	appId: "",
+};
+```
+
+---
+
+### Step 5
+
+Install Firebase
+
+```bash
+npm install firebase
+```
+
+---
+
+### Step 6
+
+Create:
+
+```text
+src/lib/firebase/firebase.js
+```
+
+Add:
+
+```js
+import { initializeApp } from "firebase/app";
+
+const firebaseConfig = {
+	apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+
+	authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+
+	projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+
+	storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+
+	messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+
+	appId: import.meta.env.VITE_FIREBASE_APP_ID,
+};
+
+const app = initializeApp(firebaseConfig);
+
+export default app;
+```
+
+---
+
+### Step 7
+
+Create:
+
+```text
+.env
+```
+
+Add:
+
+```env
+VITE_FIREBASE_API_KEY=
+
+VITE_FIREBASE_AUTH_DOMAIN=
+
+VITE_FIREBASE_PROJECT_ID=
+
+VITE_FIREBASE_STORAGE_BUCKET=
+
+VITE_FIREBASE_MESSAGING_SENDER_ID=
+
+VITE_FIREBASE_APP_ID=
+```
+
+Never commit:
+
+```text
+.env
+```
+
+Add:
+
+```text
+.env
+```
+
+to:
+
+```text
+.gitignore
+```
+
+---
+
+### Step 8
+
+Create Firestore service:
+
+```text
+src/lib/firebase/resourceService.js
+```
+
+Future cloud sync logic lives there.
+
+---
+
+## Available Scripts
+
+Run development:
+
+```bash
+npm run dev
+```
+
+Build production:
+
+```bash
+npm run build
+```
+
+Preview build:
+
+```bash
+npm run preview
+```
+
+---
+
+## Deployment
+
+Project deployed with Vercel.
+
+Deploy:
+
+1. Push repository to GitHub
+
+2. Login to Vercel
+
+3. Import repository
+
+4. Add environment variables
+
+5. Deploy
+
+---
+
+## Contributing
+
+Contributions, issues and feature suggestions are welcome.
+
+Steps:
+
+1. Fork repository
+
+2. Create branch
+
+```bash
+git checkout -b feature-name
+```
+
+3. Commit changes
+
+```bash
+git commit -m "added feature"
+```
+
+4. Push:
+
+```bash
+git push origin feature-name
+```
+
+5. Open Pull Request
+
+---
+
+## Contact
+
+Keith Owino
+
+Email:
+
+[designsolutions1629@gmail.com](mailto:designsolutions1629@gmail.com)
+
+Portfolio:
+
+[https://pickaxe-and-shovel.vercel.app](https://pickaxe-and-shovel.vercel.app)
+
+GitHub:
+
+[https://github.com/keithowino](https://github.com/keithowino)
+
+---
+
+## License
+
+MIT License

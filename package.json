@@ -1,0 +1,40 @@
+{
+	"name": "r4_hub",
+	"version": "1.0.0",
+	"description": "",
+	"private": true,
+	"scripts": {
+		"dev": "concurrently \"npm run server\" \"npm run client\" --names \"🟦SERVER,🟩CLIENT\" --prefix-colors \"blue,green\"",
+		"dev:server-only": "cd server && npm run dev",
+		"dev:client-only": "cd client && npm run dev",
+		"server": "cd server && npm run dev",
+		"client": "cd client && npm run dev",
+		"build": "concurrently \"npm run build:server\" \"npm run build:client\" --names \"BUILD\"",
+		"build:server": "cd server && npm run build",
+		"build:client": "cd client && npm run build",
+		"install:all": "npm install && cd server && npm install && cd client && npm install",
+		"install:server": "cd server && npm install",
+		"install:client": "cd client && npm install",
+		"clean": "rimraf server/node_modules client/node_modules node_modules",
+		"clean:install": "npm run clean && npm run install:all",
+		"status": "echo 'Server: http://localhost:5000 | Client: http://localhost:3000'",
+		"logs:server": "cd server && npm run dev --silent",
+		"logs:client": "cd client && npm run dev --silent"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/keithowino/r4-hub.git"
+	},
+	"keywords": [],
+	"author": "Keith Owino",
+	"license": "PROPRIETARY",
+	"type": "commonjs",
+	"bugs": {
+		"url": "https://github.com/keithowino/r4-hub/issues"
+	},
+	"homepage": "https://github.com/keithowino/r4-hub#readme",
+	"dependencies": {
+		"concurrently": "^10.0.3",
+		"rimraf": "^6.1.3"
+	}
+}

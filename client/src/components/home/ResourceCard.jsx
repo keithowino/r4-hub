@@ -1,7 +1,7 @@
 import React from "react";
 import { ExternalLink, Trash2, Edit2, Copy, Star } from "lucide-react";
 import { toast } from "react-toastify";
-import { useData } from "../../lib/context/DataContext";
+import { useData } from "../../lib/context/CommonContext";
 import { incrementVisit } from "../../lib/services/links";
 
 const ResourceCard = ({ link, onDelete, onEdit, onFavorite, onVisit }) => {

@@ -3,6 +3,8 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import path from "path";
+import resourceRoutes from "./routes/resourceRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
 
 /*
 // recommended for use only during development.
@@ -51,7 +53,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-// app.use("/api/auth", authRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/resources", resourceRoutes);
 
 // Health check
 app.get("/api/health", (req, res) => {

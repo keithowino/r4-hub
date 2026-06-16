@@ -1,8 +1,8 @@
 import { createContext, useContext, useState } from "react";
 
-const DataContext = createContext();
+const CommonContext = createContext();
 
-export const DataProvider = ({ children }) => {
+export const CommonContextProvider = ({ children }) => {
 	const [categories, setCategories] = useState([
 		"LLM",
 		"AI Agent",
@@ -29,23 +29,23 @@ export const DataProvider = ({ children }) => {
 		}
 	};
 
-	const dataContextFeatures = {
+	const CommonContextFeatures = {
 		categories,
 		colors,
 		addCategory,
 	};
 
 	return (
-		<DataContext.Provider value={dataContextFeatures}>
+		<CommonContext.Provider value={CommonContextFeatures}>
 			{children}
-		</DataContext.Provider>
+		</CommonContext.Provider>
 	);
 };
 
 export const useData = () => {
-	const context = useContext(DataContext);
-	if (!context) {
-		throw new Error("useData must be used within a DataProvider");
+	const ctx = useContext(CommonContext);
+	if (!ctx) {
+		throw new Error("useData must be used within a CommonContextProvider");
 	}
-	return context;
+	return ctx;
 };

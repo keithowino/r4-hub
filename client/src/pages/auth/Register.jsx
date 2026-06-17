@@ -3,23 +3,45 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../lib/context/AuthContext.jsx";
 import MetaDataInsert from "../../lib/MetaDataInsert.jsx";
 
-const Login = () => {
-	const { login, error, clearError } = useAuth();
+const Register = () => {
+	const { register, loading, error, clearError } = useAuth();
 	const navigate = useNavigate();
 
-	const [formData, setFormData] = useState({ email: "", password: "" });
+	const [formData, setFormData] = useState({
+		name: "",
+		email: "",
+		password: "",
+		confirmPassword: "",
+	});
+	const [fieldError, setFieldError] = useState("");
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	const handleChange = (e) => {
 		clearError();
+		setFieldError("");
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+
+		if (formData.password !== formData.confirmPassword) {
+			setFieldError("Passwords do not match");
+			return;
+		}
+
+		if (formData.password.length < 6) {
+			setFieldError("Password must be at least 6 characters");
+			return;
+		}
+
 		setIsSubmitting(true);
 		try {
-			await login({ email: formData.email, password: formData.password });
+			await register({
+				name: formData.name,
+				email: formData.email,
+				password: formData.password,
+			});
 			navigate("/dashboard");
 		} catch {
 			// error is already set in AuthContext
@@ -28,11 +50,14 @@ const Login = () => {
 		}
 	};
 
+	const displayError = fieldError || error;
+
 	return (
 		<>
-			<MetaDataInsert title="Sign In" />
+			<MetaDataInsert title="Create Account" />
 
 			<div style={styles.page}>
+				{/* Background grid */}
 				<div style={styles.grid} aria-hidden="true" />
 
 				<div style={styles.card}>
@@ -44,19 +69,43 @@ const Login = () => {
 						</span>
 					</div>
 
-					<h1 style={styles.heading}>Welcome back</h1>
+					<h1 style={styles.heading}>Create your account</h1>
 					<p style={styles.subheading}>
-						Sign in to access your dev resources.
+						Your dev resources, organized in one place.
 					</p>
 
-					{error && (
+					{/* Error */}
+					{displayError && (
 						<div style={styles.errorBox}>
 							<span style={styles.errorIcon}>!</span>
-							{error}
+							{displayError}
 						</div>
 					)}
 
 					<form onSubmit={handleSubmit} style={styles.form}>
+						<div style={styles.field}>
+							<label style={styles.label} htmlFor="name">
+								Name
+							</label>
+							<input
+								id="name"
+								name="name"
+								type="text"
+								required
+								autoComplete="name"
+								placeholder="Keith Owino"
+								style={styles.input}
+								value={formData.name}
+								onChange={handleChange}
+								onFocus={(e) =>
+									(e.target.style.borderColor = "#6c63ff")
+								}
+								onBlur={(e) =>
+									(e.target.style.borderColor = "#2a3044")
+								}
+							/>
+						</div>
+
 						<div style={styles.field}>
 							<label style={styles.label} htmlFor="email">
 								Email
@@ -67,7 +116,6 @@ const Login = () => {
 								type="email"
 								required
 								autoComplete="email"
-								autoFocus
 								placeholder="keith@example.com"
 								style={styles.input}
 								value={formData.email}
@@ -82,20 +130,44 @@ const Login = () => {
 						</div>
 
 						<div style={styles.field}>
-							<div style={styles.labelRow}>
-								<label style={styles.label} htmlFor="password">
-									Password
-								</label>
-							</div>
+							<label style={styles.label} htmlFor="password">
+								Password
+							</label>
 							<input
 								id="password"
 								name="password"
 								type="password"
 								required
-								autoComplete="current-password"
-								placeholder="Your password"
+								autoComplete="new-password"
+								placeholder="Min. 6 characters"
 								style={styles.input}
 								value={formData.password}
+								onChange={handleChange}
+								onFocus={(e) =>
+									(e.target.style.borderColor = "#6c63ff")
+								}
+								onBlur={(e) =>
+									(e.target.style.borderColor = "#2a3044")
+								}
+							/>
+						</div>
+
+						<div style={styles.field}>
+							<label
+								style={styles.label}
+								htmlFor="confirmPassword"
+							>
+								Confirm Password
+							</label>
+							<input
+								id="confirmPassword"
+								name="confirmPassword"
+								type="password"
+								required
+								autoComplete="new-password"
+								placeholder="Repeat your password"
+								style={styles.input}
+								value={formData.confirmPassword}
 								onChange={handleChange}
 								onFocus={(e) =>
 									(e.target.style.borderColor = "#6c63ff")
@@ -120,22 +192,23 @@ const Login = () => {
 							{isSubmitting ? (
 								<span style={styles.btnInner}>
 									<span style={styles.spinner} />
-									Signing in...
+									Creating account...
 								</span>
 							) : (
-								"Sign in"
+								"Create account"
 							)}
 						</button>
 					</form>
 
 					<p style={styles.footer}>
-						Don't have an account?{" "}
-						<Link to="/register" style={styles.link}>
-							Create one
+						Already have an account?{" "}
+						<Link to="/login" style={styles.link}>
+							Sign in
 						</Link>
 					</p>
 				</div>
 
+				{/* Bottom tagline */}
 				<p style={styles.tagline}>
 					<span style={styles.taglineAccent}>&lt;/&gt;</span> Built
 					for developers, designed for productivity.
@@ -255,11 +328,6 @@ const styles = {
 		flexDirection: "column",
 		gap: "6px",
 	},
-	labelRow: {
-		display: "flex",
-		alignItems: "center",
-		justifyContent: "space-between",
-	},
 	label: {
 		fontSize: "12px",
 		fontWeight: "600",
@@ -326,4 +394,4 @@ const styles = {
 	},
 };
 
-export default Login;
+export default Register;

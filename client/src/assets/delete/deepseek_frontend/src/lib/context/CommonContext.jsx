@@ -42,7 +42,7 @@ export const CommonContextProvider = ({ children }) => {
 	);
 };
 
-export const useCommon = () => {
+export const useData = () => {
 	const ctx = useContext(CommonContext);
 	if (!ctx) {
 		throw new Error("useData must be used within a CommonContextProvider");

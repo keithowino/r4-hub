@@ -1,154 +1,88 @@
-// import React from "react";
-// import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-// import Home from "./pages/Home";
-// import { HelmetProvider } from "react-helmet-async";
-// import MainLayout from "./components/Layout";
-// import { ToastContainer } from "react-toastify";
-// // import Dashboard from "./pages/Dashboard";
-// import { CommonContextProvider } from "./lib/context/CommonContext";
-// import { AuthContextProvider } from "./lib/context/AuthContext";
-
-// const App = () => {
-// 	const AuthenticatedApp = () => {
-// 		return (
-// 			<Routes>
-// 				<Route path="/" element={<MainLayout />}>
-// 					<Route index element={<Home />} />
-// 					{/* <Route path="/dashboard" element={<Dashboard />} /> */}
-// 				</Route>
-// 			</Routes>
-// 		);
-// 	};
-
-// 	return (
-// 		<AuthContextProvider>
-// 			<CommonContextProvider>
-// 				<HelmetProvider>
-// 					<Router>
-// 						<AuthenticatedApp />
-// 					</Router>
-// 				</HelmetProvider>
-// 				<ToastContainer />
-// 			</CommonContextProvider>
-// 		</AuthContextProvider>
-// 	);
-// };
-
-// export default App;
-
-import React from "react";
 import {
 	BrowserRouter as Router,
 	Routes,
 	Route,
 	Navigate,
 } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { AuthContextProvider, useAuth } from "./lib/context/AuthContext";
-import Dashboard from "./pages/Dashboard";
+import { HelmetProvider } from "react-helmet-async";
 import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { AuthContextProvider } from "./lib/context/AuthContext.jsx";
+import { CommonContextProvider } from "./lib/context/CommonContext.jsx";
+import ProtectedRoute, {
+	PublicOnlyRoute,
+} from "./components/common/ProtectedRoute.jsx";
+import Home from "./pages/Home.jsx";
+import Login from "./pages/auth/Login.jsx";
+import Register from "./pages/auth/Register.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
 import MainLayout from "./components/Layout";
-import { CommonContextProvider } from "./lib/context/CommonContext";
-import Login from "./pages/auth/Login";
 import Favorites from "./pages/Favorites";
 import Categories from "./pages/Categories";
-
-const queryClient = new QueryClient({
-	defaultOptions: {
-		queries: {
-			staleTime: 5 * 60 * 1000,
-			retry: 1,
-		},
-	},
-});
-
-const ProtectedRoute = ({ children }) => {
-	const { isAuthenticated, loading } = useAuth();
-
-	if (loading) {
-		return (
-			<div className="min-h-screen flex items-center justify-center bg-[#030712]">
-				<div className="text-white">Loading...</div>
-			</div>
-		);
-	}
-
-	return isAuthenticated ? children : <Navigate to="/login" />;
-};
 
 const AppRoutes = () => {
 	return (
 		<Routes>
-			<Route path="/login" element={<Login />} />
+			{/* Public landing page */}
+			<Route path="/" element={<Home />} />
+
+			{/* Public only — redirect to dashboard if already logged in */}
+			<Route element={<PublicOnlyRoute />}>
+				<Route path="/login" element={<Login />} />
+				<Route path="/register" element={<Register />} />
+			</Route>
+
 			<Route
-				path="/"
+				path="/overview"
 				element={
 					<ProtectedRoute>
 						<MainLayout />
 					</ProtectedRoute>
 				}
 			>
-				<Route index element={<Dashboard />} />
-				<Route path="favorites" element={<Favorites />} />
-				<Route path="categories" element={<Categories />} />
+				{/* <Route index element={<Dashboard />} /> */}
+				{/* <Route path="favorites" element={<Favorites />} /> */}
+				{/* <Route path="categories" element={<Categories />} /> */}
 				{/* <Route path="ai-tools" element={<Dashboard />} /> */}
 				{/* <Route path="platforms" element={<Dashboard />} /> */}
 				{/* <Route path="cloud" element={<Dashboard />} /> */}
 				{/* <Route path="dev-tools" element={<Dashboard />} /> */}
-				<Route path="resources" element={<Dashboard />} />
+				{/* <Route path="resources" element={<Dashboard />} /> */}
 			</Route>
+
+			{/* Catch-all */}
+			<Route path="*" element={<Navigate to="/" replace />} />
 		</Routes>
 	);
 };
 
 const App = () => {
 	return (
-		<QueryClientProvider client={queryClient}>
+		<HelmetProvider>
 			<AuthContextProvider>
 				<CommonContextProvider>
 					<Router>
 						<AppRoutes />
-						{/* <ToastContainer
-							position="top-right"
-							toastOptions={{
-								duration: 4000,
-								style: {
-									background: "#0A0F1F",
-									color: "#fff",
-									border: "1px solid rgba(255,255,255,0.1)",
-									borderRadius: "12px",
-								},
-								success: {
-									iconTheme: {
-										primary: "#34D399",
-										secondary: "#fff",
-									},
-								},
-								error: {
-									iconTheme: {
-										primary: "#F87171",
-										secondary: "#fff",
-									},
-								},
-							}}
-						/> */}
 						<ToastContainer
-							position="top-right"
+							position="bottom-right"
 							autoClose={4000}
-							hideProgressBar={false}
+							hideProgressBar
 							newestOnTop
-							closeOnClick={false}
-							rtl={false}
-							pauseOnFocusLoss
-							draggable
+							closeOnClick
 							pauseOnHover
-							theme="colored"
-							// transition={Bounce}
+							theme="dark"
+							toastStyle={{
+								background: "#1e2330",
+								border: "1px solid #2a3044",
+								color: "#e8eaf0",
+								fontSize: "13px",
+								borderRadius: "10px",
+							}}
 						/>
 					</Router>
 				</CommonContextProvider>
 			</AuthContextProvider>
-		</QueryClientProvider>
+		</HelmetProvider>
 	);
 };
 

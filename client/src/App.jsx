@@ -40,7 +40,7 @@ const AppRoutes = () => {
 					</ProtectedRoute>
 				}
 			>
-				{/* <Route index element={<Dashboard />} /> */}
+				<Route index element={<Dashboard />} />
 				{/* <Route path="favorites" element={<Favorites />} /> */}
 				{/* <Route path="categories" element={<Categories />} /> */}
 				{/* <Route path="ai-tools" element={<Dashboard />} /> */}
@@ -59,8 +59,8 @@ const AppRoutes = () => {
 const App = () => {
 	return (
 		<HelmetProvider>
-			<AuthContextProvider>
-				<CommonContextProvider>
+			<CommonContextProvider>
+				<AuthContextProvider>
 					<Router>
 						<AppRoutes />
 						<ToastContainer
@@ -80,8 +80,8 @@ const App = () => {
 							}}
 						/>
 					</Router>
-				</CommonContextProvider>
-			</AuthContextProvider>
+				</AuthContextProvider>
+			</CommonContextProvider>
 		</HelmetProvider>
 	);
 };

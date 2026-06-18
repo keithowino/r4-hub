@@ -543,7 +543,7 @@ const Dashboard = () => {
 
 			<div style={s.page}>
 				{/* ── TOP NAV ── */}
-				<nav style={s.topnav}>
+				{/* <nav style={s.topnav}>
 					<div style={s.navLeft}>
 						<div style={s.logoHex}>R4</div>
 						<span style={s.logoText}>
@@ -584,11 +584,11 @@ const Dashboard = () => {
 							⎋
 						</button>
 					</div>
-				</nav>
+				</nav> */}
 
 				<div style={s.body}>
 					{/* ── SIDEBAR ── */}
-					<aside style={s.sidebar}>
+					{/* <aside style={s.sidebar}>
 						<div style={s.sideSection}>
 							<div
 								style={{
@@ -675,7 +675,7 @@ const Dashboard = () => {
 								</div>
 							</div>
 						)}
-					</aside>
+					</aside> */}
 
 					{/* ── MAIN ── */}
 					<main style={s.main}>
@@ -933,8 +933,7 @@ const Dashboard = () => {
 					</main>
 
 					{/* ── RIGHT PANEL ── */}
-					<aside style={s.rightPanel}>
-						{/* Stats */}
+					{/* <aside style={s.rightPanel}>
 						<div style={s.panelSection}>
 							<div style={s.panelTitle}>Summary</div>
 							<div style={s.statGrid}>
@@ -978,7 +977,6 @@ const Dashboard = () => {
 							</div>
 						</div>
 
-						{/* Most visited */}
 						{resources.length > 0 && (
 							<div style={s.panelSection}>
 								<div style={s.panelTitle}>Most Visited</div>
@@ -1016,7 +1014,6 @@ const Dashboard = () => {
 							</div>
 						)}
 
-						{/* User */}
 						<div style={s.panelSection}>
 							<div style={s.panelTitle}>Account</div>
 							<div style={s.userCard}>
@@ -1037,7 +1034,6 @@ const Dashboard = () => {
 							</button>
 						</div>
 
-						{/* Dev widget */}
 						<div style={s.panelSection}>
 							<div style={s.panelTitle}>Dev Widget</div>
 							<div style={s.codeBlock}>
@@ -1060,7 +1056,7 @@ const Dashboard = () => {
 								{"();"}
 							</div>
 						</div>
-					</aside>
+					</aside> */}
 				</div>
 			</div>
 

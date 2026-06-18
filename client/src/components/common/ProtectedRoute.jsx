@@ -1,4 +1,4 @@
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "../../lib/context/AuthContext";
 
 // Shows a full-screen loader while auth state is being verified on mount
@@ -31,18 +31,29 @@ const ProtectedRoute = ({ children }) => {
 	return children; // ← Return children instead of Outlet
 };
 
-// Wraps public routes — redirects to /dashboard if already logged in
-export const PublicOnlyRoute = ({ children }) => {
-	// ← Accept children prop
+// // Wraps public routes — redirects to /dashboard if already logged in
+// export const PublicOnlyRoute = ({ children }) => {
+// 	// ← Accept children prop
+// 	const { isAuthenticated, loading } = useAuth();
+
+// 	if (loading) return <AuthLoader />;
+
+// 	if (isAuthenticated) {
+// 		return <Navigate to="/overview" replace />;
+// 	}
+
+// 	return children; // ← Return children instead of Outlet
+// };
+export const PublicOnlyRoute = () => {
 	const { isAuthenticated, loading } = useAuth();
 
 	if (loading) return <AuthLoader />;
 
 	if (isAuthenticated) {
-		return <Navigate to="/dashboard" replace />;
+		return <Navigate to="/overview" replace />;
 	}
 
-	return children; // ← Return children instead of Outlet
+	return <Outlet />;
 };
 
 const styles = {

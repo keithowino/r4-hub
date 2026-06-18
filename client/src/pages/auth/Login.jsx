@@ -2,9 +2,11 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../lib/context/AuthContext.jsx";
 import MetaDataInsert from "../../lib/MetaDataInsert.jsx";
+import { useCommon } from "../../lib/context/CommonContext.jsx";
 
 const Login = () => {
 	const { login, error, clearError } = useAuth();
+	const { styles } = useCommon();
 	const navigate = useNavigate();
 
 	const [formData, setFormData] = useState({ email: "", password: "" });
@@ -20,7 +22,7 @@ const Login = () => {
 		setIsSubmitting(true);
 		try {
 			await login({ email: formData.email, password: formData.password });
-			navigate("/dashboard");
+			navigate("/overview");
 		} catch {
 			// error is already set in AuthContext
 		} finally {
@@ -32,7 +34,7 @@ const Login = () => {
 		<>
 			<MetaDataInsert title="Sign In" />
 
-			<div style={styles.page}>
+			<div className="relative container mx-auto min-h-screen flex flex-col items-center justify-center bg-[#0d0f14] overflow-hidden">
 				<div style={styles.grid} aria-hidden="true" />
 
 				<div style={styles.card}>
@@ -149,181 +151,6 @@ const Login = () => {
 			`}</style>
 		</>
 	);
-};
-
-const styles = {
-	page: {
-		minHeight: "100vh",
-		background: "#0d0f14",
-		display: "flex",
-		flexDirection: "column",
-		alignItems: "center",
-		justifyContent: "center",
-		padding: "24px 16px",
-		position: "relative",
-		overflow: "hidden",
-	},
-	grid: {
-		position: "absolute",
-		inset: 0,
-		backgroundImage: `
-			linear-gradient(rgba(108,99,255,0.04) 1px, transparent 1px),
-			linear-gradient(90deg, rgba(108,99,255,0.04) 1px, transparent 1px)
-		`,
-		backgroundSize: "40px 40px",
-		pointerEvents: "none",
-	},
-	card: {
-		width: "100%",
-		maxWidth: "400px",
-		background: "#161920",
-		border: "1px solid #2a3044",
-		borderRadius: "16px",
-		padding: "36px 32px",
-		position: "relative",
-		zIndex: 1,
-	},
-	logoRow: {
-		display: "flex",
-		alignItems: "center",
-		gap: "10px",
-		marginBottom: "28px",
-	},
-	logoHex: {
-		width: "32px",
-		height: "32px",
-		background: "linear-gradient(135deg, #6c63ff, #3b82f6)",
-		borderRadius: "8px",
-		display: "flex",
-		alignItems: "center",
-		justifyContent: "center",
-		fontWeight: "900",
-		fontSize: "12px",
-		color: "#fff",
-	},
-	logoText: {
-		fontWeight: "700",
-		fontSize: "18px",
-		color: "#e8eaf0",
-	},
-	logoAccent: {
-		color: "#6c63ff",
-	},
-	heading: {
-		fontSize: "22px",
-		fontWeight: "700",
-		color: "#e8eaf0",
-		margin: "0 0 6px",
-	},
-	subheading: {
-		fontSize: "13px",
-		color: "#8b9ab8",
-		margin: "0 0 24px",
-	},
-	errorBox: {
-		display: "flex",
-		alignItems: "center",
-		gap: "8px",
-		background: "rgba(239,68,68,0.1)",
-		border: "1px solid rgba(239,68,68,0.3)",
-		borderRadius: "8px",
-		padding: "10px 14px",
-		fontSize: "13px",
-		color: "#f87171",
-		marginBottom: "20px",
-	},
-	errorIcon: {
-		width: "18px",
-		height: "18px",
-		background: "#ef4444",
-		borderRadius: "50%",
-		display: "flex",
-		alignItems: "center",
-		justifyContent: "center",
-		fontSize: "11px",
-		fontWeight: "700",
-		color: "#fff",
-		flexShrink: 0,
-	},
-	form: {
-		display: "flex",
-		flexDirection: "column",
-		gap: "16px",
-	},
-	field: {
-		display: "flex",
-		flexDirection: "column",
-		gap: "6px",
-	},
-	labelRow: {
-		display: "flex",
-		alignItems: "center",
-		justifyContent: "space-between",
-	},
-	label: {
-		fontSize: "12px",
-		fontWeight: "600",
-		color: "#8b9ab8",
-	},
-	input: {
-		background: "#1e2330",
-		border: "1px solid #2a3044",
-		borderRadius: "8px",
-		padding: "10px 14px",
-		color: "#e8eaf0",
-		fontSize: "13px",
-		outline: "none",
-		transition: "border-color 0.15s",
-		width: "100%",
-	},
-	btn: {
-		width: "100%",
-		background: "linear-gradient(135deg, #6c63ff, #4f46e5)",
-		border: "none",
-		borderRadius: "8px",
-		padding: "12px",
-		color: "#fff",
-		fontSize: "14px",
-		fontWeight: "600",
-		marginTop: "4px",
-		transition: "opacity 0.15s",
-	},
-	btnInner: {
-		display: "flex",
-		alignItems: "center",
-		justifyContent: "center",
-		gap: "8px",
-	},
-	spinner: {
-		width: "14px",
-		height: "14px",
-		border: "2px solid rgba(255,255,255,0.3)",
-		borderTopColor: "#fff",
-		borderRadius: "50%",
-		display: "inline-block",
-		animation: "spin 0.7s linear infinite",
-	},
-	footer: {
-		textAlign: "center",
-		fontSize: "13px",
-		color: "#8b9ab8",
-		marginTop: "24px",
-	},
-	link: {
-		color: "#6c63ff",
-		textDecoration: "none",
-		fontWeight: "600",
-	},
-	tagline: {
-		marginTop: "32px",
-		fontSize: "12px",
-		color: "#3a4260",
-		position: "relative",
-		zIndex: 1,
-	},
-	taglineAccent: {
-		color: "#6c63ff",
-	},
 };
 
 export default Login;

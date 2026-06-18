@@ -42,6 +42,7 @@ const Layout = () => {
 
 	const [resources, setResources] = useState([]);
 	const [search, setSearch] = useState("");
+	const [isSearchOpen, setIsSearchOpen] = useState(false);
 	const [modalOpen, setModalOpen] = useState(false);
 	const [editingResource, setEditingResource] = useState(null);
 
@@ -68,8 +69,8 @@ const Layout = () => {
 	return (
 		<div>
 			<OverviewNavbar
-				search={search}
-				setSearch={setSearch}
+				setIsSearchOpen={setIsSearchOpen}
+				handleLogout={handleLogout}
 				openAddModal={openAddModal}
 			/>
 			<div style={styles.body}>

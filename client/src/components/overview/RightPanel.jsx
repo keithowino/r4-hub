@@ -96,34 +96,6 @@ hub.search("database")
 				</pre>
 			</div>
 
-			{/* <div className="flex items-center gap-2 mb-3">
-							<Activity size={16} className="text-gray-400" />
-							<h3 className="text-sm font-semibold text-gray-300">
-								System Status
-							</h3>
-						</div>
-						<div className="space-y-2">
-							{systemStatus.map((item) => (
-								<div
-									key={item.name}
-									className="flex items-center justify-between"
-								>
-									<span className="text-sm text-gray-400">
-										{item.name}
-									</span>
-									<div className="flex items-center gap-2">
-										<span className="text-xs text-green-400">
-											{item.status}
-										</span>
-										<CheckCircle
-											size={12}
-											className="text-green-400"
-										/>
-									</div>
-								</div>
-							))}
-						</div> */}
-
 			{/* system stats */}
 			<div style={styles.panelSection}>
 				<div style={styles.panelTitle}>

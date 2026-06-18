@@ -34,12 +34,31 @@ import OverviewSidebar from "./overview/Sidebar";
 import OverviewRightPanel from "./overview/RightPanel";
 import { useState } from "react";
 import { useCommon } from "../lib/context/CommonContext";
+import { useAuth } from "../lib/context/AuthContext";
 
 const Layout = () => {
 	const { styles } = useCommon();
+	const { user, logout } = useAuth();
+
+	const [resources, setResources] = useState([]);
 	const [search, setSearch] = useState("");
 	const [modalOpen, setModalOpen] = useState(false);
 	const [editingResource, setEditingResource] = useState(null);
+
+	const favorites = resources.filter((r) => r.favorite);
+	const uniqueCategories = [...new Set(resources.map((r) => r.category))];
+	const allTags = [...new Set(resources.flatMap((r) => r.tags || []))];
+	const stats = {
+		total: resources.length,
+		favorites: favorites.length,
+		categories: uniqueCategories.length,
+		tags: allTags.length,
+	};
+
+	const handleLogout = () => {
+		logout();
+		navigate("/login");
+	};
 
 	const openAddModal = () => {
 		setEditingResource(null);
@@ -47,7 +66,6 @@ const Layout = () => {
 	};
 
 	return (
-		// <div style={styles.page}>
 		<div>
 			<OverviewNavbar
 				search={search}
@@ -65,7 +83,11 @@ const Layout = () => {
 				</main>
 
 				<aside style={styles.rightPanel}>
-					{/* <OverviewRightPanel /> */}
+					<OverviewRightPanel
+						stats={stats}
+						resources={resources}
+						handleLogout={handleLogout}
+					/>
 				</aside>
 			</div>
 		</div>

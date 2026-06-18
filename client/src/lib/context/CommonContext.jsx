@@ -689,9 +689,9 @@ export const CommonContextProvider = ({ children }) => {
 		loadingText: { fontSize: "13px", color: "#3a4260" },
 		rightPanel: {
 			background: "#161920",
-			borderLeft: "1px solid #2a3044",
+			// borderLeft: "1px solid #2a3044",
 			padding: "16px 12px",
-			overflowY: "auto",
+			// overflowY: "auto",
 		},
 		panelSection: { marginBottom: "20px" },
 		panelTitle: {
@@ -701,6 +701,8 @@ export const CommonContextProvider = ({ children }) => {
 			textTransform: "uppercase",
 			letterSpacing: ".06em",
 			marginBottom: "10px",
+			display: "flex",
+			gap: "8px",
 		},
 		statGrid: {
 			display: "grid",
@@ -772,17 +774,6 @@ export const CommonContextProvider = ({ children }) => {
 			color: "#5a6a8a",
 			fontSize: "12px",
 			cursor: "pointer",
-		},
-		codeBlock: {
-			background: "#0a0c10",
-			border: "1px solid #2a3044",
-			borderRadius: "8px",
-			padding: "12px",
-			fontFamily: "monospace",
-			fontSize: "11px",
-			color: "#8b9ab8",
-			lineHeight: "1.6",
-			whiteSpace: "pre",
 		},
 		overlay: {
 			position: "fixed",
@@ -965,6 +956,13 @@ export const CommonContextProvider = ({ children }) => {
 		},
 	};
 
+	const systemStatus = [
+		{ name: "API", status: "operational" },
+		{ name: "Database", status: "operational" },
+		{ name: "Search", status: "operational" },
+		{ name: "Sync", status: "operational" },
+	];
+
 	const addCategory = (newCategory) => {
 		if (!categories.includes(newCategory)) {
 			setCategories([...categories, newCategory]);
@@ -976,6 +974,7 @@ export const CommonContextProvider = ({ children }) => {
 		colors,
 		addCategory,
 		styles,
+		systemStatus,
 	};
 
 	return (

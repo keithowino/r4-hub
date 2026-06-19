@@ -14,7 +14,7 @@ const ResourceGrid = ({
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
 				{[...Array(8)].map((_, i) => (
 					<div
-						key={i}
+						key={`skeleton-${i}`} // ← Add key to skeleton items
 						className="h-48 rounded-xl bg-white/5 animate-pulse"
 					/>
 				))}
@@ -46,7 +46,7 @@ const ResourceGrid = ({
 		>
 			{resources.map((resource) => (
 				<ResourceCard
-					key={resource.id}
+					key={resource._id || resource.id}
 					resource={resource}
 					onFavorite={onFavorite}
 					onDelete={onDelete}

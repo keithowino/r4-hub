@@ -1,130 +1,36 @@
-// import { useState } from "react";
-
-// const Sidebar = () => {
-// 	const [activeFilter, setActiveFilter] = useState("All");
-
-// 	return (
-// 		<aside style={s.sidebar}>
-// 			<div style={s.sideSection}>
-// 				<div
-// 					style={{
-// 						...s.sideItem,
-// 						...(activeFilter === "All" ? s.sideItemActive : {}),
-// 					}}
-// 					onClick={() => setActiveFilter("All")}
-// 				>
-// 					<span>⊞</span> Dashboard
-// 				</div>
-// 				{/* <div
-// 					style={{
-// 						...s.sideItem,
-// 						...(activeFilter === "favorites"
-// 							? s.sideItemActive
-// 							: {}),
-// 					}}
-// 					onClick={() => setActiveFilter("favorites")}
-// 				>
-// 					<span>★</span> Favorites
-// 					{favorites.length > 0 && (
-// 						<span style={s.sideBadge}>{favorites.length}</span>
-// 					)}
-// 				</div>
-// 				<div style={s.sideItem} onClick={openAddModal}>
-// 					<span>+</span> Add Resource
-// 				</div> */}
-// 			</div>
-
-// 			{/* {uniqueCategories.length > 0 && (
-// 				<div style={s.sideSection}>
-// 					<div style={s.sideLabel}>Categories</div>
-// 					{uniqueCategories.map((cat) => {
-// 						const c = getCatColor(cat);
-// 						return (
-// 							<div
-// 								key={cat}
-// 								style={{
-// 									...s.sideItem,
-// 									...(activeFilter === cat
-// 										? s.sideItemActive
-// 										: {}),
-// 								}}
-// 								onClick={() => setActiveFilter(cat)}
-// 							>
-// 								<span
-// 									style={{ ...s.catDot, background: c.text }}
-// 								/>
-// 								{cat}
-// 								<span style={s.sideCount}>
-// 									{
-// 										resources.filter(
-// 											(r) => r.category === cat,
-// 										).length
-// 									}
-// 								</span>
-// 							</div>
-// 						);
-// 					})}
-// 				</div>
-// 			)} */}
-
-// 			{/* {allTags.length > 0 && (
-// 				<div style={s.sideSection}>
-// 					<div style={s.sideLabel}>Tags</div>
-// 					<div style={s.tagCloud}>
-// 						{allTags.slice(0, 16).map((tag) => (
-// 							<span
-// 								key={tag}
-// 								style={s.tagPill}
-// 								onClick={() => setSearch(tag)}
-// 							>
-// 								{tag}
-// 							</span>
-// 						))}
-// 					</div>
-// 				</div>
-// 			)} */}
-// 		</aside>
-// 	);
-// };
-
-// ______________________________________________________________________________________
-
 import { useCallback, useEffect, useState } from "react";
 import { useCommon } from "../../lib/context/CommonContext";
 import { getResources } from "../../lib/services/resourceService";
 import {
+	ChevronDownIcon,
+	ChevronRightIcon,
+	CrownIcon,
 	FolderOpenIcon,
 	LayoutDashboard,
+	PlusIcon,
 	StarIcon,
 	TagsIcon,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
 
-const COLORS = {
-	LLM: { bg: "rgba(168,85,247,.15)", text: "#a855f7" },
-	"AI Agent": { bg: "rgba(236,72,153,.15)", text: "#ec4899" },
-	Backend: { bg: "rgba(34,197,94,.15)", text: "#22c55e" },
-	Hosting: { bg: "rgba(59,130,246,.15)", text: "#3b82f6" },
-	Frontend: { bg: "rgba(245,158,11,.15)", text: "#f59e0b" },
-	Database: { bg: "rgba(239,68,68,.15)", text: "#ef4444" },
-	Cloud: { bg: "rgba(20,184,166,.15)", text: "#14b8a6" },
-	"Dev Tools": { bg: "rgba(108,99,255,.15)", text: "#6c63ff" },
-	Learning: { bg: "rgba(249,115,22,.15)", text: "#f97316" },
-	Other: { bg: "rgba(139,154,184,.15)", text: "#8b9ab8" },
-};
-
-const getCatColor = (cat) => COLORS[cat] || COLORS.Other;
-
-const Sidebar = ({ openAddModal, setSearch }) => {
-	const { categories, styles } = useCommon();
+const Sidebar = ({
+	openAddModal,
+	setSearch,
+	resources,
+	favorites,
+	uniqueCategories,
+	allTags,
+}) => {
+	const { categories, styles, getCatColor } = useCommon();
 	const [activeFilter, setActiveFilter] = useState("All");
-	const [resources, setResources] = useState([]);
 	const [loading, setLoading] = useState(true);
+	const [expandedFolders, setExpandedFolders] = useState([
+		"AI Tools",
+		"Dev Platforms",
+	]);
 
 	const location = useLocation();
-	const favorites = resources.filter((r) => r.favorite);
-	const uniqueCategories = [...new Set(resources.map((r) => r.category))];
-	const allTags = [...new Set(resources.flatMap((r) => r.tags || []))];
 
 	const mainNav = [
 		{ icon: LayoutDashboard, label: "Dashboard", path: "/overview" },
@@ -135,6 +41,19 @@ const Sidebar = ({ openAddModal, setSearch }) => {
 			path: "/overview/resources",
 		},
 		{ icon: TagsIcon, label: "Categories", path: "/overview/categories" },
+	];
+
+	const folders = [
+		{ name: "AI Tools", count: 12, color: "from-purple-500 to-pink-500" },
+		{ name: "Dev Platforms", count: 8, color: "from-blue-500 to-cyan-500" },
+		{
+			name: "Cloud Services",
+			count: 6,
+			color: "from-sky-500 to-indigo-500",
+		},
+		{ name: "Code Tools", count: 10, color: "from-orange-500 to-red-500" },
+		{ name: "Learning", count: 5, color: "from-violet-500 to-purple-500" },
+		{ name: "Work Projects", count: 4, color: "from-teal-500 to-cyan-500" },
 	];
 
 	const loadResources = useCallback(async () => {
@@ -153,8 +72,17 @@ const Sidebar = ({ openAddModal, setSearch }) => {
 		loadResources();
 	}, [loadResources]);
 
+	const toggleFolder = (name) => {
+		setExpandedFolders((prev) =>
+			prev.includes(name)
+				? prev.filter((f) => f !== name)
+				: [...prev, name],
+		);
+	};
+
 	return (
-		<aside style={styles.sidebar}>
+		// <aside style={styles.sidebar}>
+		<aside className="bg-[#161920] border-r-[1px] border-solid border-[#2a3044] py-3 px-2 overflow-y-auto flex flex-col gap-0.5">
 			<div style={styles.sideSection}>
 				<nav className="space-y-1 mb-6">
 					{mainNav.map((item) => {
@@ -177,54 +105,57 @@ const Sidebar = ({ openAddModal, setSearch }) => {
 						);
 					})}
 				</nav>
-				{/* <div
-					style={{
-						...styles.sideItem,
-						...(activeFilter === "All"
-							? styles.sideItemActive
-							: {}),
-					}}
-					onClick={() => setActiveFilter("All")}
-				>
-					<span>
-						<LayoutDashboard size={16} />
-					</span>{" "}
-					Dashboard
-				</div> */}
-				{/* <div
-					style={{
-						...styles.sideItem,
-						...(activeFilter === "favorites"
-							? styles.sideItemActive
-							: {}),
-					}}
-					onClick={() => setActiveFilter("favorites")}
-				>
-					<span>
-						<StarIcon size={16} />
-					</span>{" "}
-					Favorites
-					{favorites.length > 0 && (
-						<span style={styles.sideBadge}>{favorites.length}</span>
-					)}
-				</div> */}
-				{/* <div
-					style={{
-						...styles.sideItem,
-						...(activeFilter === "categories"
-							? styles.sideItemActive
-							: {}),
-					}}
-					onClick={() => setActiveFilter("categories")}
-				>
-					<span>
-						<TagsIcon size={16} />
-					</span>{" "}
-					Categories
-				</div> */}
-				{/* <div style={styles.sideItem} onClick={openAddModal}>
-					<span>+</span> Add Resource
-				</div> */}
+			</div>
+
+			<div className="mb-6">
+				<div className="flex items-center justify-between px-3 mb-2">
+					<span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+						Folders
+					</span>
+					<button className="p-1 rounded hover:bg-white/5 transition-colors">
+						<PlusIcon size={14} className="text-gray-400" />
+					</button>
+				</div>
+				<div className="space-y-1">
+					{folders.map((folder) => {
+						const isExpanded = expandedFolders.includes(
+							folder.name,
+						);
+						return (
+							<div key={folder.name}>
+								<button
+									onClick={() => toggleFolder(folder.name)}
+									className="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-white/5 transition-colors group"
+								>
+									<div className="flex items-center gap-2">
+										<div
+											className={`w-2 h-2 rounded-full bg-gradient-to-r ${folder.color}`}
+										/>
+										<span className="text-sm text-gray-300">
+											{folder.name}
+										</span>
+									</div>
+									<div className="flex items-center gap-2">
+										<span className="text-xs text-gray-500">
+											{folder.count}
+										</span>
+										{isExpanded ? (
+											<ChevronDownIcon
+												size={14}
+												className="text-gray-500"
+											/>
+										) : (
+											<ChevronRightIcon
+												size={14}
+												className="text-gray-500"
+											/>
+										)}
+									</div>
+								</button>
+							</div>
+						);
+					})}
+				</div>
 			</div>
 
 			{uniqueCategories.length > 0 && (
@@ -279,6 +210,22 @@ const Sidebar = ({ openAddModal, setSearch }) => {
 					</div>
 				</div>
 			)}
+
+			{/* Upgrade Card */}
+			<div className="mt-auto p-4 rounded-xl bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-white/5">
+				<div className="flex items-center gap-2 mb-2">
+					<CrownIcon size={16} className="text-yellow-500" />
+					<span className="text-sm font-semibold">
+						Upgrade to Pro
+					</span>
+				</div>
+				<p className="text-xs text-gray-400 mb-3 text-center">
+					Unlock custom themes, advanced analytics, and more.
+				</p>
+				<button className="w-full py-1.5 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 text-white text-sm font-medium hover:shadow-lg hover:shadow-blue-500/25 transition-all">
+					Upgrade Now
+				</button>
+			</div>
 		</aside>
 	);
 };

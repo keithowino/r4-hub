@@ -1,46 +1,20 @@
-// import React from "react";
-// import { Outlet } from "react-router-dom";
-// import data from "../lib/data";
-
-// const Layout = () => {
-// 	return (
-// 		<section className="layout relative flex flex-col min-h-screen items-center bg-gray-50">
-// 			<main>
-// 				<Outlet />
-// 			</main>
-// 			<footer className="absolute bottom-0 flex justify-center w-full">
-// 				<p className="text-sm">
-// 					&copy; {new Date().getFullYear()}
-// 					{""} Powered by{""}{" "}
-// 					<a
-// 						href={`${data.metadata.parentCompany.link}`}
-// 						target="_blank"
-// 						rel="noopener noreferrer"
-// 						className="cursor-pointer hover:text-blue-600"
-// 					>
-// 						{data.metadata.parentCompany.name}
-// 					</a>
-// 				</p>
-// 			</footer>
-// 		</section>
-// 	);
-// };
-
-// export default Layout;
-
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import OverviewNavbar from "./overview/Navbar";
 import OverviewSidebar from "./overview/Sidebar";
 import OverviewRightPanel from "./overview/RightPanel";
-import { useState } from "react";
 import { useCommon } from "../lib/context/CommonContext";
 import { useAuth } from "../lib/context/AuthContext";
+import { useResources } from "../hooks/useResources";
+import { useState } from "react";
 
 const Layout = () => {
 	const { styles } = useCommon();
 	const { user, logout } = useAuth();
+	const navigate = useNavigate();
 
-	const [resources, setResources] = useState([]);
+	// ✅ Pull real data instead of dead local state
+	const { resources = [] } = useResources();
+
 	const [search, setSearch] = useState("");
 	const [isSearchOpen, setIsSearchOpen] = useState(false);
 	const [modalOpen, setModalOpen] = useState(false);
@@ -77,12 +51,14 @@ const Layout = () => {
 				<OverviewSidebar
 					openAddModal={openAddModal}
 					setSearch={setSearch}
+					resources={resources}
+					favorites={favorites}
+					uniqueCategories={uniqueCategories}
+					allTags={allTags}
 				/>
-
 				<main style={styles.main}>
 					<Outlet />
 				</main>
-
 				<aside style={styles.rightPanel}>
 					<OverviewRightPanel
 						stats={stats}

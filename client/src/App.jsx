@@ -19,6 +19,16 @@ import Dashboard from "./pages/Dashboard.jsx";
 import MainLayout from "./components/Layout";
 import Favorites from "./pages/Favorites";
 import Categories from "./pages/Categories";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient({
+	defaultOptions: {
+		queries: {
+			staleTime: 5 * 60 * 1000,
+			retry: 1,
+		},
+	},
+});
 
 const AppRoutes = () => {
 	return (
@@ -41,13 +51,13 @@ const AppRoutes = () => {
 				}
 			>
 				<Route index element={<Dashboard />} />
-				{/* <Route path="favorites" element={<Favorites />} /> */}
-				{/* <Route path="categories" element={<Categories />} /> */}
-				{/* <Route path="ai-tools" element={<Dashboard />} /> */}
-				{/* <Route path="platforms" element={<Dashboard />} /> */}
-				{/* <Route path="cloud" element={<Dashboard />} /> */}
-				{/* <Route path="dev-tools" element={<Dashboard />} /> */}
-				{/* <Route path="resources" element={<Dashboard />} /> */}
+				<Route path="favorites" element={<Favorites />} />
+				<Route path="categories" element={<Categories />} />
+				<Route path="ai-tools" element={<Dashboard />} />
+				<Route path="platforms" element={<Dashboard />} />
+				<Route path="cloud" element={<Dashboard />} />
+				<Route path="dev-tools" element={<Dashboard />} />
+				<Route path="resources" element={<Dashboard />} />
 			</Route>
 
 			{/* Catch-all */}
@@ -59,29 +69,31 @@ const AppRoutes = () => {
 const App = () => {
 	return (
 		<HelmetProvider>
-			<CommonContextProvider>
-				<AuthContextProvider>
-					<Router>
-						<AppRoutes />
-						<ToastContainer
-							position="bottom-right"
-							autoClose={4000}
-							hideProgressBar
-							newestOnTop
-							closeOnClick
-							pauseOnHover
-							theme="dark"
-							toastStyle={{
-								background: "#1e2330",
-								border: "1px solid #2a3044",
-								color: "#e8eaf0",
-								fontSize: "13px",
-								borderRadius: "10px",
-							}}
-						/>
-					</Router>
-				</AuthContextProvider>
-			</CommonContextProvider>
+			<QueryClientProvider client={queryClient}>
+				<CommonContextProvider>
+					<AuthContextProvider>
+						<Router>
+							<AppRoutes />
+							<ToastContainer
+								position="bottom-right"
+								autoClose={4000}
+								hideProgressBar
+								newestOnTop
+								closeOnClick
+								pauseOnHover
+								theme="dark"
+								toastStyle={{
+									background: "#1e2330",
+									border: "1px solid #2a3044",
+									color: "#e8eaf0",
+									fontSize: "13px",
+									borderRadius: "10px",
+								}}
+							/>
+						</Router>
+					</AuthContextProvider>
+				</CommonContextProvider>
+			</QueryClientProvider>
 		</HelmetProvider>
 	);
 };

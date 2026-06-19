@@ -5,23 +5,36 @@ const CommonContext = createContext();
 export const CommonContextProvider = ({ children }) => {
 	const [categories, setCategories] = useState([
 		"LLM",
-		"AI Agent",
+		"AI Tools",
 		"Backend",
 		"Hosting",
 		"Frontend",
 		"Database",
+		"Cloud",
+		"Code Tools",
+		"Dev Platforms",
+		"Learning",
+		"Productivity",
 		"Other",
 	]);
 
-	const colors = {
-		LLM: "bg-purple-100 text-purple-800",
-		"AI Agent": "bg-pink-100 text-pink-800",
-		Backend: "bg-green-100 text-green-800",
-		Hosting: "bg-blue-100 text-blue-800",
-		Frontend: "bg-yellow-100 text-yellow-800",
-		Database: "bg-red-100 text-red-800",
-		Other: "bg-gray-100 text-gray-800",
+	const categoryColors = {
+		"AI Tools": "from-purple-500 to-pink-500",
+		"AI Agent": "from-pink-500 to-rose-500",
+		LLM: "from-violet-500 to-purple-500",
+		Backend: "from-green-500 to-emerald-500",
+		Hosting: "from-blue-500 to-cyan-500",
+		Frontend: "from-yellow-500 to-orange-500",
+		Database: "from-red-500 to-orange-500",
+		Cloud: "from-sky-500 to-indigo-500",
+		"Code Tools": "from-orange-500 to-red-500",
+		"Dev Platforms": "from-blue-500 to-purple-500",
+		Learning: "from-teal-500 to-cyan-500",
+		Productivity: "from-emerald-500 to-teal-500",
+		Other: "from-gray-500 to-gray-600",
 	};
+
+	const getCatColor = (cat) => categoryColors[cat] || categoryColors.Other;
 
 	const styles = {
 		page: {
@@ -234,15 +247,6 @@ export const CommonContextProvider = ({ children }) => {
 			gridTemplateColumns: "196px 1fr 220px",
 			flex: 1,
 			overflow: "hidden",
-		},
-		sidebar: {
-			background: "#161920",
-			borderRight: "1px solid #2a3044",
-			padding: "12px 8px",
-			overflowY: "auto",
-			display: "flex",
-			flexDirection: "column",
-			gap: "4px",
 		},
 		terminal: {
 			width: "100%",
@@ -958,10 +962,11 @@ export const CommonContextProvider = ({ children }) => {
 
 	const CommonContextFeatures = {
 		categories,
-		colors,
+		categoryColors,
 		addCategory,
 		styles,
 		systemStatus,
+		getCatColor,
 	};
 
 	return (

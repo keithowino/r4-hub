@@ -13,7 +13,7 @@ const QuickAccess = ({ resources = [], onAdd }) => {
 			<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
 				{favorites.map((resource) => (
 					<motion.a
-						key={resource.id}
+						key={resource._id || resource.id}
 						href={resource.url}
 						target="_blank"
 						rel="noopener noreferrer"

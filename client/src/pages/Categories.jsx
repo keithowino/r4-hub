@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { Tags, Plus } from "lucide-react";
 import { useResources } from "../hooks/useResources";
 import ResourceGrid from "../components/dashboard/ResourceGrid";
-import { CATEGORIES, CATEGORY_COLORS } from "../utils/constants";
+import { useCommon } from "../lib/context/CommonContext";
 
 const Categories = () => {
+	const { categories, categoryColors } = useCommon();
 	const [selectedCategory, setSelectedCategory] = useState(null);
 	const {
 		resources,
@@ -44,7 +45,7 @@ const Categories = () => {
 				>
 					All
 				</button>
-				{CATEGORIES.map((category) => (
+				{categories.map((category) => (
 					<button
 						key={category}
 						onClick={() => setSelectedCategory(category)}
@@ -79,7 +80,7 @@ const Categories = () => {
 					>
 						<span className="flex items-center gap-2">
 							<span
-								className={`w-2 h-2 rounded-full bg-gradient-to-r ${CATEGORY_COLORS[category] || CATEGORY_COLORS.Other}`}
+								className={`w-2 h-2 rounded-full bg-gradient-to-r ${categoryColors[category] || categoryColors.Other}`}
 							/>
 							{category}
 						</span>

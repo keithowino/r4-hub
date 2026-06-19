@@ -19,7 +19,10 @@
 		"clean:install": "npm run clean && npm run install:all",
 		"status": "echo 'Server: http://localhost:5000 | Client: http://localhost:3000'",
 		"logs:server": "cd server && npm run dev --silent",
-		"logs:client": "cd client && npm run dev --silent"
+		"logs:client": "cd client && npm run dev --silent",
+		"traceWarnings": "concurrently \"npm run traceServerwarnings\" \"npm run traceClientwarnings\" --names \"TRACEWARNING\"",
+		"traceServerwarnings": "cd server && npm run traceWarnings",
+		"traceClientwarnings": "cd client && npm run traceWarnings"
 	},
 	"repository": {
 		"type": "git",

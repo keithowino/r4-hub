@@ -10,15 +10,22 @@ const ResourceCard = ({
 	onVisit,
 	viewMode = "grid",
 }) => {
+	const resourceId = resource._id || resource.id;
+
 	const copyUrl = () => {
 		navigator.clipboard.writeText(resource.url);
 		toast.success("URL copied to clipboard!");
 	};
 
 	const handleVisit = () => {
-		onVisit(resource.id);
-		window.open(resource.url, "_blank");
+		if (resourceId) {
+			onVisit(resourceId);
+			window.open(resource.url, "_blank");
+		}
 	};
+
+	// ✅ Safely get tags array
+	const tags = Array.isArray(resource.tags) ? resource.tags : [];
 
 	if (viewMode === "list") {
 		return (
@@ -55,7 +62,7 @@ const ResourceCard = ({
 						<Copy size={16} className="text-gray-400" />
 					</button>
 					<button
-						onClick={() => onFavorite(resource.id)}
+						onClick={() => onFavorite(resourceId)}
 						className="p-1.5 rounded hover:bg-white/5 transition-colors"
 					>
 						<Star
@@ -82,10 +89,12 @@ const ResourceCard = ({
 			<div className="flex items-start justify-between mb-2">
 				<div className="flex items-center gap-2">
 					<span className="text-2xl">{resource.icon || "🔗"}</span>
-					<h3 className="font-medium text-white">{resource.title}</h3>
+					<h3 className="font-medium text-white truncate">
+						{resource.title}
+					</h3>
 				</div>
 				<button
-					onClick={() => onFavorite(resource.id)}
+					onClick={() => onFavorite(resourceId)}
 					className="p-1 rounded hover:bg-white/5 transition-colors"
 				>
 					<Star
@@ -107,14 +116,16 @@ const ResourceCard = ({
 				<span className="text-xs px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400">
 					{resource.category}
 				</span>
-				{resource.tags?.slice(0, 3).map((tag) => (
-					<span
-						key={tag}
-						className="text-xs px-2 py-0.5 rounded-full bg-white/5 text-gray-400"
-					>
-						#{tag}
-					</span>
-				))}
+				{/* ✅ FIX: Only render tags if they exist and are an array */}
+				{tags.length > 0 &&
+					tags.slice(0, 3).map((tag, index) => (
+						<span
+							key={`${resourceId}-tag-${index}`}
+							className="text-xs px-2 py-0.5 rounded-full bg-white/5 text-gray-400"
+						>
+							#{tag}
+						</span>
+					))}
 			</div>
 
 			<div className="flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity">
@@ -132,7 +143,7 @@ const ResourceCard = ({
 						<Copy size={14} className="text-gray-400" />
 					</button>
 					<button
-						onClick={() => onDelete(resource.id)}
+						onClick={() => onDelete(resourceId)}
 						className="p-1.5 rounded hover:bg-red-500/10 transition-colors"
 					>
 						<Trash2

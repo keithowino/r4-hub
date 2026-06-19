@@ -2,32 +2,57 @@ import api from "../axios.js";
 
 // ─── Resource Calls ───────────────────────────────────────────────────────────
 
+// // GET /api/resources
+// // Supports optional filters: { category, favorite, status, search, tag }
+// export const getResources = async (filters = {}) => {
+// 	try {
+// 		const params = new URLSearchParams();
+
+// 		if (filters.category) params.append("category", filters.category);
+// 		if (filters.favorite) params.append("favorite", "true");
+// 		if (filters.status) params.append("status", filters.status);
+// 		if (filters.search) params.append("search", filters.search);
+// 		if (filters.tag) params.append("tag", filters.tag);
+
+// 		const res = await api.get(`/resources?${params.toString()}`);
+
+// 		// Ensure we always return an array
+// 		if (res.data && Array.isArray(res.data)) {
+// 			return res.data;
+// 		} else if (res.data && res.data.data && Array.isArray(res.data.data)) {
+// 			return res.data.data;
+// 		} else {
+// 			return [];
+// 		}
+// 	} catch (error) {
+// 		console.error("Error fetching resources:", error);
+// 		return []; // Return empty array on error
+// 	}
+// };
+
 // GET /api/resources
 // Supports optional filters: { category, favorite, status, search, tag }
 export const getResources = async (filters = {}) => {
-	try {
-		const params = new URLSearchParams();
+	const params = new URLSearchParams();
 
-		if (filters.category) params.append("category", filters.category);
-		if (filters.favorite) params.append("favorite", "true");
-		if (filters.status) params.append("status", filters.status);
-		if (filters.search) params.append("search", filters.search);
-		if (filters.tag) params.append("tag", filters.tag);
+	if (filters.category) params.append("category", filters.category);
+	if (filters.favorite) params.append("favorite", "true");
+	if (filters.status) params.append("status", filters.status);
+	if (filters.search) params.append("search", filters.search);
+	if (filters.tag) params.append("tag", filters.tag);
 
-		const res = await api.get(`/resources?${params.toString()}`);
+	const res = await api.get(`/resources?${params.toString()}`);
 
-		// Ensure we always return an array
-		if (res.data && Array.isArray(res.data)) {
-			return res.data;
-		} else if (res.data && res.data.data && Array.isArray(res.data.data)) {
-			return res.data.data;
-		} else {
-			return [];
-		}
-	} catch (error) {
-		console.error("Error fetching resources:", error);
-		return []; // Return empty array on error
+	// Server responds with { success, count, data: [...] }
+	if (res.data && Array.isArray(res.data.data)) {
+		return res.data.data;
 	}
+	if (Array.isArray(res.data)) {
+		return res.data;
+	}
+	return [];
+	// NOTE: no try/catch — let the error propagate so React Query
+	// can set `error` and trigger any onError handlers.
 };
 
 // GET /api/resources/:id
@@ -50,6 +75,10 @@ export const updateResource = async (id, resourceData) => {
 
 // DELETE /api/resources/:id
 export const deleteResource = async (id) => {
+	if (!id) {
+		console.error("deleteResource called with undefined id");
+		throw new Error("Resource ID is required");
+	}
 	const res = await api.delete(`/resources/${id}`);
 	return res.data;
 };

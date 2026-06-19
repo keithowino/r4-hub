@@ -11,7 +11,7 @@ import {
 	Sparkles,
 } from "lucide-react";
 import { toast } from "react-toastify";
-import { CATEGORIES, CATEGORY_COLORS } from "../../../utils/constants";
+import { useCommon } from "../../../lib/context/CommonContext";
 
 const AddResourceModal = ({
 	isOpen,
@@ -19,6 +19,7 @@ const AddResourceModal = ({
 	onSave,
 	editingResource = null,
 }) => {
+	const { categories, categoryColors } = useCommon();
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [isFetchingTitle, setIsFetchingTitle] = useState(false);
 	const [formData, setFormData] = useState({
@@ -314,7 +315,7 @@ const AddResourceModal = ({
 										}
 										className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-lg focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all text-white appearance-none cursor-pointer"
 									>
-										{CATEGORIES.map((category) => (
+										{categories.map((category) => (
 											<option
 												key={category}
 												value={category}
@@ -328,7 +329,7 @@ const AddResourceModal = ({
 								{/* Category color preview */}
 								<div className="mt-1.5 flex items-center gap-2">
 									<div
-										className={`w-2 h-2 rounded-full bg-gradient-to-r ${CATEGORY_COLORS[formData.category] || CATEGORY_COLORS.Other}`}
+										className={`w-2 h-2 rounded-full bg-gradient-to-r ${categoryColors[formData.category] || categoryColors.Other}`}
 									/>
 									<span className="text-xs text-gray-500">
 										Selected: {formData.category}

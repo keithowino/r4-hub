@@ -8,11 +8,15 @@ export const NAV_TABS = [
 ];
 
 export const CATEGORIES = [
+	"LLM",
 	"AI Tools",
-	"Dev Platforms",
-	"Databases",
+	"Backend",
+	"Hosting",
+	"Frontend",
+	"Database",
 	"Cloud",
 	"Code Tools",
+	"Dev Platforms",
 	"Learning",
 	"Productivity",
 	"Other",

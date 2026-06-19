@@ -3,7 +3,7 @@ import { useAuth } from "../../lib/context/AuthContext";
 import { useCommon } from "../../lib/context/CommonContext";
 
 const RightPanel = ({ stats, resources, handleLogout }) => {
-	const { styles, systemStatus } = useCommon();
+	const { styles, systemStatus, getCatColor } = useCommon();
 	const { user } = useAuth();
 
 	return (
@@ -75,7 +75,7 @@ const RightPanel = ({ stats, resources, handleLogout }) => {
 									<div style={styles.visitName}>
 										{r.title}
 									</div>
-									<div style={s.visitCount}>
+									<div style={styles.visitCount}>
 										{r.visitCount || 0}
 									</div>
 								</div>

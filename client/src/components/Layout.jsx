@@ -18,8 +18,6 @@ const Layout = () => {
 
 	const [search, setSearch] = useState("");
 	const [isSearchOpen, setIsSearchOpen] = useState(false);
-	const [modalOpen, setModalOpen] = useState(false);
-	const [editingResource, setEditingResource] = useState(null);
 
 	const favorites = resources.filter((r) => r.favorite);
 	const uniqueCategories = [...new Set(resources.map((r) => r.category))];
@@ -36,21 +34,14 @@ const Layout = () => {
 		navigate("/login");
 	};
 
-	const openAddModal = () => {
-		setEditingResource(null);
-		setModalOpen(true);
-	};
-
 	return (
 		<div>
 			<OverviewNavbar
 				setIsSearchOpen={setIsSearchOpen}
 				handleLogout={handleLogout}
-				openAddModal={openAddModal}
 			/>
 			<div style={styles.body}>
 				<OverviewSidebar
-					openAddModal={openAddModal}
 					setSearch={setSearch}
 					resources={resources}
 					favorites={favorites}
@@ -61,11 +52,7 @@ const Layout = () => {
 					<Outlet />
 				</main>
 				<aside style={styles.rightPanel}>
-					<OverviewRightPanel
-						stats={stats}
-						resources={resources}
-						handleLogout={handleLogout}
-					/>
+					<OverviewRightPanel stats={stats} resources={resources} />
 				</aside>
 			</div>
 

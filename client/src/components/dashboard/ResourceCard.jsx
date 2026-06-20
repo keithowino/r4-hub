@@ -150,7 +150,7 @@ const GridCard = ({
 				{/* Top row: icon + star */}
 				<div className="flex items-start justify-between mb-3">
 					{/* Icon */}
-					<div
+					{/* <div
 						className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
 						style={{
 							background: c.bg,
@@ -173,8 +173,35 @@ const GridCard = ({
 									"??"}
 							</span>
 						)}
-					</div>
+					</div> */}
 
+					<div
+						className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
+						style={{
+							background: c.bg,
+							border: `1px solid ${c.border}`,
+						}}
+					>
+						{/* Try to show favicon first, fallback to emoji, then initials */}
+						{resource.favicon && !imgErr ? (
+							<img
+								src={resource.favicon}
+								alt=""
+								className="w-5 h-5 object-contain"
+								onError={() => setImgErr(true)}
+							/>
+						) : resource.icon ? (
+							<span className="text-xl">{resource.icon}</span>
+						) : (
+							<span
+								className="text-sm font-bold"
+								style={{ color: c.text }}
+							>
+								{resource.title?.slice(0, 2).toUpperCase() ||
+									"??"}
+							</span>
+						)}
+					</div>
 					{/* Star */}
 					<button
 						onClick={() => onFavorite?.(id)}
@@ -225,7 +252,7 @@ const GridCard = ({
 						{tags.slice(0, 3).map((tag) => (
 							<span
 								key={tag}
-								className="text-[10px] font-medium px-2 py-0.5 rounded-full"
+								className="text-[10px] font-medium px-2 py-0.5 rounded-sm"
 								style={{
 									background: c.badge,
 									color: c.text,
@@ -389,13 +416,12 @@ const ListCard = ({
 					{resource.url}
 				</p>
 			</div>
-
 			{/* Tags */}
 			<div className="hidden md:flex items-center gap-1.5 flex-shrink-0">
 				{tags.slice(0, 2).map((tag) => (
 					<span
 						key={tag}
-						className="text-[10px] px-2 py-0.5 rounded-full"
+						className="text-[10px] px-2 py-0.5 rounded-sm"
 						style={{
 							background: c.badge,
 							color: c.text,
@@ -406,7 +432,6 @@ const ListCard = ({
 					</span>
 				))}
 			</div>
-
 			{/* Visit count */}
 			<div
 				className="hidden sm:flex items-center gap-1 flex-shrink-0"
@@ -415,7 +440,6 @@ const ListCard = ({
 				<Eye size={11} />
 				<span className="text-[10px]">{resource.visitCount || 0}</span>
 			</div>
-
 			{/* Actions */}
 			<div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
 				<button

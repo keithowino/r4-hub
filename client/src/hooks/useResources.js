@@ -3,11 +3,21 @@ import * as resourceService from "../lib/services/resourceService";
 import { toast } from "react-toastify";
 
 // ✅ Normalize resources to ensure they always have an 'id' field
+// const normalizeResources = (data) => {
+// 	if (!Array.isArray(data)) return [];
+// 	return data.map((item) => ({
+// 		...item,
+// 		id: item._id || item.id, // Ensure id exists
+// 	}));
+// };
+
 const normalizeResources = (data) => {
 	if (!Array.isArray(data)) return [];
 	return data.map((item) => ({
 		...item,
-		id: item._id || item.id, // Ensure id exists
+		id: item._id || item.id,
+		// Ensure icon has a default if missing
+		icon: item.icon || "🔗",
 	}));
 };
 

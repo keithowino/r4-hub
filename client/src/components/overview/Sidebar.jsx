@@ -15,7 +15,6 @@ import { Link, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const Sidebar = ({
-	openAddModal,
 	setSearch,
 	resources,
 	favorites,

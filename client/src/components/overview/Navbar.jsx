@@ -221,7 +221,7 @@ const ProfileDropdown = ({ user, handleLogout }) => {
 
 // ─── Navbar ───────────────────────────────────────────────────────────────────
 
-const Navbar = ({ setIsSearchOpen, handleLogout, openAddModal }) => {
+const Navbar = ({ setIsSearchOpen, handleLogout }) => {
 	const { user } = useAuth();
 	const { setIsAddResModalOpen } = useCommon();
 	const location = useLocation();
@@ -301,7 +301,6 @@ const Navbar = ({ setIsSearchOpen, handleLogout, openAddModal }) => {
 
 					{/* Add Resource shortcut */}
 					<button
-						// onClick={openAddModal}
 						onClick={() => setIsAddResModalOpen((prev) => !prev)}
 						className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm font-medium hover:shadow-lg hover:shadow-blue-500/25 transition-all"
 					>

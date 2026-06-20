@@ -47,6 +47,11 @@ const resourceSchema = new mongoose.Schema(
 			default: "",
 			maxlength: [500, "Notes cannot exceed 500 characters"],
 		},
+		icon: {
+			type: String,
+			default: "🔗",
+			maxlength: [2, "Icon must be a single emoji"],
+		},
 		favicon: {
 			type: String,
 			default: "",

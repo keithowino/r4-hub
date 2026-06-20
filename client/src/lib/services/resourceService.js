@@ -2,34 +2,6 @@ import api from "../axios.js";
 
 // ─── Resource Calls ───────────────────────────────────────────────────────────
 
-// // GET /api/resources
-// // Supports optional filters: { category, favorite, status, search, tag }
-// export const getResources = async (filters = {}) => {
-// 	try {
-// 		const params = new URLSearchParams();
-
-// 		if (filters.category) params.append("category", filters.category);
-// 		if (filters.favorite) params.append("favorite", "true");
-// 		if (filters.status) params.append("status", filters.status);
-// 		if (filters.search) params.append("search", filters.search);
-// 		if (filters.tag) params.append("tag", filters.tag);
-
-// 		const res = await api.get(`/resources?${params.toString()}`);
-
-// 		// Ensure we always return an array
-// 		if (res.data && Array.isArray(res.data)) {
-// 			return res.data;
-// 		} else if (res.data && res.data.data && Array.isArray(res.data.data)) {
-// 			return res.data.data;
-// 		} else {
-// 			return [];
-// 		}
-// 	} catch (error) {
-// 		console.error("Error fetching resources:", error);
-// 		return []; // Return empty array on error
-// 	}
-// };
-
 // GET /api/resources
 // Supports optional filters: { category, favorite, status, search, tag }
 export const getResources = async (filters = {}) => {

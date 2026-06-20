@@ -64,30 +64,67 @@ export const getResource = async (req, res, next) => {
 	}
 };
 
+// // @desc    Create a resource
+// // @route   POST /api/resources
+// // @access  Private
+// export const createResource = async (req, res, next) => {
+// 	try {
+// 		const { title, url, category, subcategory, tags, notes, favicon } =
+// 			req.body;
+
+// 		let faviconUrl = favicon;
+// 		if (!faviconUrl && url) {
+// 			try {
+// 				faviconUrl = `${new URL(url).origin}/favicon.ico`;
+// 			} catch {
+// 				faviconUrl = "";
+// 			}
+// 		}
+
+// 		const resource = await Resource.create({
+// 			title,
+// 			url,
+// 			category,
+// 			subcategory,
+// 			tags,
+// 			notes,
+// 			favicon: faviconUrl,
+// 			user: req.user.id,
+// 		});
+
+// 		res.status(201).json({
+// 			success: true,
+// 			data: resource,
+// 		});
+// 	} catch (error) {
+// 		next(error);
+// 	}
+// };
+
 // @desc    Create a resource
 // @route   POST /api/resources
 // @access  Private
 export const createResource = async (req, res, next) => {
 	try {
-		const { title, url, category, subcategory, tags, notes, favicon } =
+		const { title, url, category, subcategory, tags, notes, icon } =
 			req.body;
 
-		let faviconUrl = favicon;
-		if (!faviconUrl && url) {
-			try {
-				faviconUrl = `${new URL(url).origin}/favicon.ico`;
-			} catch {
-				faviconUrl = "";
-			}
+		// Generate favicon URL from domain
+		let faviconUrl = "";
+		try {
+			faviconUrl = `${new URL(url).origin}/favicon.ico`;
+		} catch {
+			faviconUrl = "";
 		}
 
 		const resource = await Resource.create({
 			title,
 			url,
 			category,
-			subcategory,
-			tags,
-			notes,
+			subcategory: subcategory || "",
+			tags: tags || [],
+			notes: notes || "",
+			icon: icon || "🔗",
 			favicon: faviconUrl,
 			user: req.user.id,
 		});

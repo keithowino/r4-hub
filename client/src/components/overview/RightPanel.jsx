@@ -2,7 +2,7 @@ import { ActivityIcon, CheckCircleIcon } from "lucide-react";
 import { useAuth } from "../../lib/context/AuthContext";
 import { useCommon } from "../../lib/context/CommonContext";
 
-const RightPanel = ({ stats, resources, handleLogout }) => {
+const RightPanel = ({ stats, resources }) => {
 	const { styles, systemStatus, getCatColor } = useCommon();
 	const { user } = useAuth();
 

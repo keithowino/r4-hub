@@ -6,14 +6,15 @@ import { useCommon } from "../lib/context/CommonContext";
 import { useAuth } from "../lib/context/AuthContext";
 import { useResources } from "../hooks/useResources";
 import { useState } from "react";
+import AddResourceModal from "./common/modals/AddResourceModal";
 
 const Layout = () => {
-	const { styles } = useCommon();
+	const { isAddResModalOpen, setIsAddResModalOpen, styles } = useCommon();
 	const { user, logout } = useAuth();
 	const navigate = useNavigate();
 
 	// ✅ Pull real data instead of dead local state
-	const { resources = [] } = useResources();
+	const { resources = [], createResource } = useResources();
 
 	const [search, setSearch] = useState("");
 	const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -67,6 +68,13 @@ const Layout = () => {
 					/>
 				</aside>
 			</div>
+
+			{/* Add Modal */}
+			<AddResourceModal
+				isOpen={isAddResModalOpen}
+				onClose={() => setIsAddResModalOpen(false)}
+				onSave={createResource}
+			/>
 		</div>
 	);
 };

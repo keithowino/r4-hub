@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../lib/context/AuthContext";
 import { useResources } from "../hooks/useResources";
 import SearchBar from "../components/dashboard/SearchBar";
@@ -22,7 +22,6 @@ const Dashboard = () => {
 		toggleFavorite,
 		deleteResource,
 		incrementVisit,
-		createResource,
 		refetch,
 	} = useResources({ search: debouncedSearch });
 
@@ -64,10 +63,7 @@ const Dashboard = () => {
 			</div>
 
 			{/* Quick Access */}
-			<QuickAccess
-				resources={sortedResources}
-				onAdd={() => setIsModalOpen(true)}
-			/>
+			<QuickAccess resources={sortedResources} />
 
 			{/* Filters */}
 			<ResourceFilters
@@ -87,13 +83,6 @@ const Dashboard = () => {
 				onVisit={incrementVisit}
 				viewMode={viewMode}
 				isLoading={isLoading}
-			/>
-
-			{/* Add Modal */}
-			<AddResourceModal
-				isOpen={isModalOpen}
-				onClose={() => setIsModalOpen(false)}
-				onSave={createResource}
 			/>
 		</div>
 	);

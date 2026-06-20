@@ -1,8 +1,10 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Plus, Star } from "lucide-react";
+import { useCommon } from "../../lib/context/CommonContext";
 
-const QuickAccess = ({ resources = [], onAdd }) => {
+const QuickAccess = ({ resources = [] }) => {
+	const { setIsAddResModalOpen } = useCommon();
 	const favorites = resources.filter((r) => r.favorite).slice(0, 5);
 
 	return (
@@ -39,7 +41,8 @@ const QuickAccess = ({ resources = [], onAdd }) => {
 				))}
 				<motion.button
 					whileHover={{ y: -2, scale: 1.02 }}
-					onClick={onAdd}
+					// onClick={onAdd}
+					onClick={() => setIsAddResModalOpen((prev) => !prev)}
 					className="p-4 rounded-xl border-2 border-dashed border-white/10 hover:border-white/20 transition-all flex flex-col items-center justify-center gap-2 text-gray-400 hover:text-white"
 				>
 					<Plus size={24} />

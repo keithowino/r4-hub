@@ -5,6 +5,7 @@ import { useCommon } from "../../lib/context/CommonContext";
 import Logo from "../common/Logo";
 import { RedirectToDashboard } from "../common/Buttons";
 import { useAuth } from "../../lib/context/AuthContext";
+import data from "../../lib/data";
 
 const Navbar = () => {
 	const { isAuthenticated } = useAuth();
@@ -117,7 +118,8 @@ const Navbar = () => {
 						{/* Footer */}
 						<div className="absolute bottom-6 left-6 right-6 border-t border-[#1e2330] pt-4">
 							<p className="text-xs text-[#3a4260] text-center">
-								© {new Date().getFullYear()} R4 Hub
+								© {new Date().getFullYear()}{" "}
+								{data.metadata.name}
 							</p>
 						</div>
 					</div>

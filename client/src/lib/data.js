@@ -1,15 +1,3 @@
-// const metadata = {
-// 	name: "R4 Hub",
-// 	parentCompany: {
-// 		name: "Pickaxe & Shovel",
-// 		link: "https://pickaxe-and-shovel.vercel.app/",
-// 	},
-// };
-
-// export default {
-// 	metadata,
-// };
-
 const metadata = {
 	name: "R4 Hub",
 	slug: "Your Dev Resource Hub",

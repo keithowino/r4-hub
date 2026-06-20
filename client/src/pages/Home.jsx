@@ -162,7 +162,9 @@ const Home = () => {
 					</section>
 
 					<section style={styles.section}>
-						<p style={styles.sectionEyebrow}>What R4 Hub does</p>
+						<p style={styles.sectionEyebrow}>
+							What {data.metadata.name} does
+						</p>
 						<h2 style={styles.sectionHeading}>
 							Built around how developers actually work
 						</h2>

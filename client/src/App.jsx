@@ -20,6 +20,7 @@ import MainLayout from "./components/Layout";
 import Favorites from "./pages/Favorites";
 import Categories from "./pages/Categories";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Profile from "./pages/Profile.jsx";
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -35,6 +36,14 @@ const AppRoutes = () => {
 		<Routes>
 			{/* Public landing page */}
 			<Route path="/" element={<Home />} />
+			<Route
+				path="profile"
+				element={
+					<ProtectedRoute>
+						<Profile />
+					</ProtectedRoute>
+				}
+			/>
 
 			{/* Public only — redirect to dashboard if already logged in */}
 			<Route element={<PublicOnlyRoute />}>

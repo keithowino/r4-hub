@@ -18,7 +18,7 @@ Portfolio: https://pickaxe-and-shovel.vercel.app
 
 Add a screenshot or thumbnail here later:
 
-![R4 Hub Preview](./preview.png)
+![R4 Hub Preview](./public/display.png)
 
 ---
 
@@ -33,14 +33,12 @@ Current features:
 - Add notes
 - Delete resources
 - Copy resource URLs
-- Automatic persistence with Local Storage
 - Responsive interface
 - Resource grouping by categories
 
 Planned features:
 
 - Edit resources
-- Firebase synchronization
 - Import/export resources
 - Quick launcher (Ctrl + K)
 - Resource analytics
@@ -64,8 +62,7 @@ Frontend:
 
 Storage:
 
-- Local Storage
-- Firebase (planned)
+- MongoDB
 
 Deployment:
 
@@ -76,33 +73,7 @@ Deployment:
 ## Project Structure
 
 ```bash
-src/
-
-├── components/
-
-│ ├── home/
-
-│ └── modals/
-
-│
-
-├── pages/
-
-│
-
-├── lib/
-
-│ ├── context/
-
-│ ├── services/
-
-│ └── firebase/
-
-│
-
-├── App.jsx
-
-└── main.jsx
+# structure here...
 ```
 
 ---
@@ -191,197 +162,6 @@ Vite starts:
 ```bash
 http://localhost:5173
 ```
-
----
-
-## Firebase Setup
-
-Firebase is intended for synchronization and cloud backup.
-
-### Step 1
-
-Visit:
-
-[https://console.firebase.google.com](https://console.firebase.google.com)
-
----
-
-### Step 2
-
-Click:
-
-Create Project
-
-Example:
-
-```text
-r4-hub
-```
-
-Continue setup.
-
----
-
-### Step 3
-
-Enable Firestore Database
-
-Inside Firebase dashboard:
-
-Build
-
-→ Firestore Database
-
-→ Create Database
-
-Choose:
-
-```text
-Start in test mode
-```
-
-Select a region.
-
----
-
-### Step 4
-
-Register web app
-
-Inside Firebase:
-
-Project Settings
-
-↓
-
-General
-
-↓
-
-Your Apps
-
-↓
-
-Web icon </>
-
-Name:
-
-```text
-r4-hub
-```
-
-Firebase generates:
-
-```js
-const firebaseConfig = {
-	apiKey: "",
-	authDomain: "",
-	projectId: "",
-	storageBucket: "",
-	messagingSenderId: "",
-	appId: "",
-};
-```
-
----
-
-### Step 5
-
-Install Firebase
-
-```bash
-npm install firebase
-```
-
----
-
-### Step 6
-
-Create:
-
-```text
-src/lib/firebase/firebase.js
-```
-
-Add:
-
-```js
-import { initializeApp } from "firebase/app";
-
-const firebaseConfig = {
-	apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-
-	authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-
-	projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-
-	storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-
-	messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-
-	appId: import.meta.env.VITE_FIREBASE_APP_ID,
-};
-
-const app = initializeApp(firebaseConfig);
-
-export default app;
-```
-
----
-
-### Step 7
-
-Create:
-
-```text
-.env
-```
-
-Add:
-
-```env
-VITE_FIREBASE_API_KEY=
-
-VITE_FIREBASE_AUTH_DOMAIN=
-
-VITE_FIREBASE_PROJECT_ID=
-
-VITE_FIREBASE_STORAGE_BUCKET=
-
-VITE_FIREBASE_MESSAGING_SENDER_ID=
-
-VITE_FIREBASE_APP_ID=
-```
-
-Never commit:
-
-```text
-.env
-```
-
-Add:
-
-```text
-.env
-```
-
-to:
-
-```text
-.gitignore
-```
-
----
-
-### Step 8
-
-Create Firestore service:
-
-```text
-src/lib/firebase/resourceService.js
-```
-
-Future cloud sync logic lives there.
 
 ---
 

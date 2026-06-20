@@ -3,6 +3,7 @@ import { createContext, useContext, useState } from "react";
 const CommonContext = createContext();
 
 export const CommonContextProvider = ({ children }) => {
+	const [isAddResModalOpen, setIsAddResModalOpen] = useState(false);
 	const [categories, setCategories] = useState([
 		"LLM",
 		"AI Tools",
@@ -961,6 +962,8 @@ export const CommonContextProvider = ({ children }) => {
 	};
 
 	const CommonContextFeatures = {
+		isAddResModalOpen,
+		setIsAddResModalOpen,
 		categories,
 		categoryColors,
 		addCategory,

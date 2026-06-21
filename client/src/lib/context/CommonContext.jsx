@@ -18,6 +18,15 @@ export const CommonContextProvider = ({ children }) => {
 		"Productivity",
 		"Other",
 	]);
+	const [rFilters, setRfilters] = useState([
+		"All",
+		"AI Tools",
+		"Dev Platforms",
+		"Database",
+		"Cloud",
+		"Code Tools",
+		"More",
+	]);
 
 	const categoryColors = {
 		"AI Tools": "from-purple-500 to-pink-500",
@@ -967,6 +976,8 @@ export const CommonContextProvider = ({ children }) => {
 		categories,
 		categoryColors,
 		addCategory,
+		rFilters,
+		setRfilters,
 		styles,
 		systemStatus,
 		getCatColor,

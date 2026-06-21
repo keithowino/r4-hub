@@ -1,5 +1,6 @@
 import React from "react";
 import { LayoutGrid, List, Clock } from "lucide-react";
+import { useCommon } from "../../lib/context/CommonContext";
 
 const ResourceFilters = ({
 	selectedFilter,
@@ -9,20 +10,12 @@ const ResourceFilters = ({
 	sortBy,
 	onSortChange,
 }) => {
-	const filters = [
-		"All",
-		"AI Tools",
-		"Dev Platforms",
-		"Databases",
-		"Cloud",
-		"Code Tools",
-		"More",
-	];
+	const { rFilters } = useCommon();
 
 	return (
 		<div className="flex flex-wrap items-center justify-between gap-4 mb-6">
 			<div className="flex flex-wrap gap-1">
-				{filters.map((filter) => (
+				{rFilters.map((filter) => (
 					<button
 						key={filter}
 						onClick={() => onFilterChange(filter)}
@@ -45,7 +38,8 @@ const ResourceFilters = ({
 					className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-white/5 transition-all"
 				>
 					<Clock size={16} />
-					{sortBy === "recent" ? "Recently Used" : "Popular"}
+					{/* {sortBy === "recent" ? "Recently Used" : "Popular"} */}
+					{sortBy === "recent" ? "Recent" : "Popular"}
 				</button>
 				<div className="flex items-center gap-1 bg-white/5 rounded-lg p-1">
 					<button

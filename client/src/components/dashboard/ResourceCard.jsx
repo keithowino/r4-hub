@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
 import {
 	Star,
@@ -10,6 +9,7 @@ import {
 	Archive,
 } from "lucide-react";
 import { toast } from "react-toastify";
+import { RIcon } from "../common/Icons";
 
 // Category color map — matches the mockup palette
 const CAT_COLORS = {
@@ -101,6 +101,150 @@ const CAT_COLORS = {
 
 const getCat = (cat) => CAT_COLORS[cat] || CAT_COLORS.Other;
 
+const handleCopy = (url) => {
+	navigator.clipboard.writeText(url);
+	toast.success("URL copied!");
+};
+
+const Description = ({ view, r, c }) => {
+	const list = view === "list";
+
+	return (
+		<div className={`${list ? "flex-1 min-w-0" : ""}`}>
+			<div className={`${list ? "flex items-center gap-2 mb-0.5" : ""}`}>
+				<h3 className="text-sm font-semibold text-white truncate">
+					{r.title}
+				</h3>
+				<span
+					className={`${list ? "text-[10px] px-1.5 py-0.5 rounded-full flex-shrink-0" : "text-xs mb-2"}`}
+					style={{ background: `${list && c.badge}`, color: c.text }}
+				>
+					{r.category}
+				</span>
+			</div>
+			{list && (
+				<p
+					className="text-xs truncate"
+					style={{ color: "rgba(255,255,255,0.3)" }}
+				>
+					{r.url}
+				</p>
+			)}
+		</div>
+	);
+};
+
+const Tags = ({ tags, c }) => {
+	return (
+		<div className="hidden md:flex items-center gap-1.5 flex-shrink-0">
+			{tags.slice(0, 3).map((tag) => (
+				<span
+					key={tag}
+					className="text-[10px] px-2 py-0.5 rounded-sm"
+					style={{
+						background: c.badge,
+						color: c.text,
+						border: `1px solid ${c.border}`,
+					}}
+				>
+					{tag}
+				</span>
+			))}
+		</div>
+	);
+};
+
+const VisitCount = ({ r }) => {
+	return (
+		<div
+			className="hidden sm:flex items-center gap-1 flex-shrink-0"
+			style={{ color: "rgba(255,255,255,0.25)" }}
+		>
+			<Eye size={11} />
+			<span className="text-[10px]">{r.visitCount || 0}</span>
+		</div>
+	);
+};
+
+const Actions = ({
+	view,
+	onFavorite,
+	id,
+	resource,
+	onVisit,
+	onEdit,
+	onArchive,
+	onDelete,
+}) => {
+	return (
+		<div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
+			{view === "list" && (
+				<button
+					onClick={() => onFavorite?.(id)}
+					className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
+					style={{
+						color: resource.favorite
+							? "#f59e0b"
+							: "rgba(255,255,255,0.3)",
+					}}
+				>
+					<Star
+						size={13}
+						fill={resource.favorite ? "#f59e0b" : "none"}
+					/>
+				</button>
+			)}
+			<a
+				href={resource.url}
+				target="_blank"
+				rel="noopener noreferrer"
+				onClick={() => onVisit?.(id)}
+				className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
+				style={{ color: "rgba(255,255,255,0.4)" }}
+				title="Open"
+			>
+				<ExternalLink size={13} />
+			</a>
+			<button
+				onClick={() => handleCopy(resource.url)}
+				className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
+				style={{ color: "rgba(255,255,255,0.4)" }}
+				title="Copy URL"
+			>
+				<Copy size={13} />
+			</button>
+			{onEdit && (
+				<button
+					onClick={() => onEdit(resource)}
+					className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
+					style={{ color: "rgba(255,255,255,0.4)" }}
+					title="Edit"
+				>
+					<Edit2 size={13} />
+				</button>
+			)}
+			{onArchive && (
+				<button
+					onClick={() => onArchive(id)}
+					className="p-1.5 rounded-lg transition-colors"
+					style={{ color: "rgba(255,255,255,0.4)" }}
+					title="Archive"
+				>
+					<Archive size={13} />
+				</button>
+			)}
+			<button
+				onClick={() => onDelete?.(id)}
+				className="p-1.5 rounded-lg hover:bg-red-500/10 transition-colors"
+				style={{ color: "rgba(255,255,255,0.4)" }}
+				title="Delete"
+			>
+				<Trash2 size={13} className="hover:text-red-400" />
+			</button>
+		</div>
+	);
+};
+
 // ─── Grid Card (default) ──────────────────────────────────────────────────────
 
 const GridCard = ({
@@ -108,22 +252,13 @@ const GridCard = ({
 	onFavorite,
 	onDelete,
 	onVisit,
+	viewMode,
 	onEdit,
 	onArchive,
 }) => {
-	const [imgErr, setImgErr] = useState(false);
 	const id = resource._id || resource.id;
 	const c = getCat(resource.category);
 	const tags = Array.isArray(resource.tags) ? resource.tags : [];
-
-	const handleCopy = () => {
-		navigator.clipboard.writeText(resource.url);
-		toast.success("URL copied!");
-	};
-
-	const handleOpen = (e) => {
-		onVisit?.(id);
-	};
 
 	return (
 		<motion.div
@@ -149,59 +284,8 @@ const GridCard = ({
 			<div className="p-4 flex flex-col flex-1">
 				{/* Top row: icon + star */}
 				<div className="flex items-start justify-between mb-3">
-					{/* Icon */}
-					{/* <div
-						className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
-						style={{
-							background: c.bg,
-							border: `1px solid ${c.border}`,
-						}}
-					>
-						{resource.favicon && !imgErr ? (
-							<img
-								src={resource.favicon}
-								alt=""
-								className="w-5 h-5 object-contain"
-								onError={() => setImgErr(true)}
-							/>
-						) : (
-							<span
-								className="text-sm font-bold"
-								style={{ color: c.text }}
-							>
-								{resource.title?.slice(0, 2).toUpperCase() ||
-									"??"}
-							</span>
-						)}
-					</div> */}
+					<RIcon c={c} md={"11"} imgd={"5"} resource={resource} />
 
-					<div
-						className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
-						style={{
-							background: c.bg,
-							border: `1px solid ${c.border}`,
-						}}
-					>
-						{/* Try to show favicon first, fallback to emoji, then initials */}
-						{resource.favicon && !imgErr ? (
-							<img
-								src={resource.favicon}
-								alt=""
-								className="w-5 h-5 object-contain"
-								onError={() => setImgErr(true)}
-							/>
-						) : resource.icon ? (
-							<span className="text-xl">{resource.icon}</span>
-						) : (
-							<span
-								className="text-sm font-bold"
-								style={{ color: c.text }}
-							>
-								{resource.title?.slice(0, 2).toUpperCase() ||
-									"??"}
-							</span>
-						)}
-					</div>
 					{/* Star */}
 					<button
 						onClick={() => onFavorite?.(id)}
@@ -228,108 +312,37 @@ const GridCard = ({
 				</div>
 
 				{/* Title + type */}
-				<h3 className="text-sm font-semibold text-white mb-0.5 truncate">
-					{resource.title}
-				</h3>
-				<p className="text-xs mb-2" style={{ color: c.text }}>
-					{resource.category}
-					{resource.subcategory ? ` · ${resource.subcategory}` : ""}
-				</p>
+				<Description view={viewMode} r={resource} c={c} />
 
-				{/* Description / notes */}
-				{(resource.description || resource.notes) && (
+				{/* notes */}
+				{resource.notes && (
 					<p
 						className="text-xs leading-relaxed mb-3 line-clamp-2"
 						style={{ color: "rgba(255,255,255,0.45)" }}
 					>
-						{resource.description || resource.notes}
+						{resource.notes}
 					</p>
 				)}
 
-				{/* Tags */}
-				{tags.length > 0 && (
-					<div className="flex flex-wrap gap-1.5 mt-auto mb-3">
-						{tags.slice(0, 3).map((tag) => (
-							<span
-								key={tag}
-								className="text-[10px] font-medium px-2 py-0.5 rounded-sm"
-								style={{
-									background: c.badge,
-									color: c.text,
-									border: `1px solid ${c.border}`,
-								}}
-							>
-								{tag}
-							</span>
-						))}
-					</div>
-				)}
+				{tags.length > 0 && <Tags tags={tags} c={c} />}
 
 				{/* Footer: visits + actions */}
 				<div
 					className="flex items-center justify-between mt-auto pt-2 border-t"
 					style={{ borderColor: "rgba(255,255,255,0.05)" }}
 				>
-					<div
-						className="flex items-center gap-1"
-						style={{ color: "rgba(255,255,255,0.25)" }}
-					>
-						<Eye size={11} />
-						<span className="text-[10px]">
-							{resource.visitCount || 0}
-						</span>
-					</div>
+					<VisitCount r={resource} />
 
-					{/* Action icons — visible on hover */}
-					<div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
-						<a
-							href={resource.url}
-							target="_blank"
-							rel="noopener noreferrer"
-							onClick={handleOpen}
-							className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
-							style={{ color: "rgba(255,255,255,0.4)" }}
-							title="Open"
-						>
-							<ExternalLink size={13} />
-						</a>
-						<button
-							onClick={handleCopy}
-							className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
-							style={{ color: "rgba(255,255,255,0.4)" }}
-							title="Copy URL"
-						>
-							<Copy size={13} />
-						</button>
-						{onEdit && (
-							<button
-								onClick={() => onEdit(resource)}
-								className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
-								style={{ color: "rgba(255,255,255,0.4)" }}
-								title="Edit"
-							>
-								<Edit2 size={13} />
-							</button>
-						)}
-						{onArchive && (
-							<button
-								onClick={() => onArchive(id)}
-								className="p-1.5 rounded-lg transition-colors"
-								style={{ color: "rgba(255,255,255,0.4)" }}
-								title="Archive"
-							>
-								<Archive size={13} />
-							</button>
-						)}
-						<button
-							onClick={() => onDelete?.(id)}
-							className="p-1.5 rounded-lg hover:bg-red-500/10 transition-colors"
-							style={{ color: "rgba(255,255,255,0.4)" }}
-							title="Delete"
-						>
-							<Trash2 size={13} className="hover:text-red-400" />
-						</button>
-					</div>
+					<Actions
+						view={viewMode}
+						onFavorite={onFavorite}
+						id={id}
+						resource={resource}
+						onVisit={onVisit}
+						onEdit={onEdit}
+						onArchive={onArchive}
+						onDelete={onDelete}
+					/>
 				</div>
 			</div>
 		</motion.div>
@@ -343,23 +356,19 @@ const ListCard = ({
 	onFavorite,
 	onDelete,
 	onVisit,
+	viewMode,
 	onEdit,
 	onArchive,
 }) => {
-	const [imgErr, setImgErr] = useState(false);
 	const id = resource._id || resource.id;
 	const c = getCat(resource.category);
 	const tags = Array.isArray(resource.tags) ? resource.tags : [];
-
-	const handleCopy = () => {
-		navigator.clipboard.writeText(resource.url);
-		toast.success("URL copied!");
-	};
 
 	return (
 		<motion.div
 			initial={{ opacity: 0, x: -8 }}
 			animate={{ opacity: 1, x: 0 }}
+			whileHover={{ x: 3, transition: { duration: 0.15 } }}
 			className="group flex items-center gap-4 px-4 py-3 rounded-xl border transition-all duration-150"
 			style={{
 				background: "rgba(22,25,32,0.9)",
@@ -374,122 +383,25 @@ const ListCard = ({
 				e.currentTarget.style.background = "rgba(22,25,32,0.9)";
 			}}
 		>
-			{/* Icon */}
-			<div
-				className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-				style={{ background: c.bg, border: `1px solid ${c.border}` }}
-			>
-				{resource.favicon && !imgErr ? (
-					<img
-						src={resource.favicon}
-						alt=""
-						className="w-4 h-4 object-contain"
-						onError={() => setImgErr(true)}
-					/>
-				) : (
-					<span
-						className="text-xs font-bold"
-						style={{ color: c.text }}
-					>
-						{resource.title?.slice(0, 2).toUpperCase() || "??"}
-					</span>
-				)}
-			</div>
+			<RIcon c={c} md={"9"} imgd={"4"} resource={resource} />
 
 			{/* Title + URL */}
-			<div className="flex-1 min-w-0">
-				<div className="flex items-center gap-2 mb-0.5">
-					<h3 className="text-sm font-semibold text-white truncate">
-						{resource.title}
-					</h3>
-					<span
-						className="text-[10px] px-1.5 py-0.5 rounded-full flex-shrink-0"
-						style={{ background: c.badge, color: c.text }}
-					>
-						{resource.category}
-					</span>
-				</div>
-				<p
-					className="text-xs truncate"
-					style={{ color: "rgba(255,255,255,0.3)" }}
-				>
-					{resource.url}
-				</p>
-			</div>
-			{/* Tags */}
-			<div className="hidden md:flex items-center gap-1.5 flex-shrink-0">
-				{tags.slice(0, 2).map((tag) => (
-					<span
-						key={tag}
-						className="text-[10px] px-2 py-0.5 rounded-sm"
-						style={{
-							background: c.badge,
-							color: c.text,
-							border: `1px solid ${c.border}`,
-						}}
-					>
-						{tag}
-					</span>
-				))}
-			</div>
-			{/* Visit count */}
-			<div
-				className="hidden sm:flex items-center gap-1 flex-shrink-0"
-				style={{ color: "rgba(255,255,255,0.25)" }}
-			>
-				<Eye size={11} />
-				<span className="text-[10px]">{resource.visitCount || 0}</span>
-			</div>
-			{/* Actions */}
-			<div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
-				<button
-					onClick={() => onFavorite?.(id)}
-					className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
-					style={{
-						color: resource.favorite
-							? "#f59e0b"
-							: "rgba(255,255,255,0.3)",
-					}}
-				>
-					<Star
-						size={13}
-						fill={resource.favorite ? "#f59e0b" : "none"}
-					/>
-				</button>
-				<a
-					href={resource.url}
-					target="_blank"
-					rel="noopener noreferrer"
-					onClick={() => onVisit?.(id)}
-					className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
-					style={{ color: "rgba(255,255,255,0.3)" }}
-				>
-					<ExternalLink size={13} />
-				</a>
-				<button
-					onClick={handleCopy}
-					className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
-					style={{ color: "rgba(255,255,255,0.3)" }}
-				>
-					<Copy size={13} />
-				</button>
-				{onEdit && (
-					<button
-						onClick={() => onEdit(resource)}
-						className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
-						style={{ color: "rgba(255,255,255,0.3)" }}
-					>
-						<Edit2 size={13} />
-					</button>
-				)}
-				<button
-					onClick={() => onDelete?.(id)}
-					className="p-1.5 rounded-lg hover:bg-red-500/10 transition-colors"
-					style={{ color: "rgba(255,255,255,0.3)" }}
-				>
-					<Trash2 size={13} />
-				</button>
-			</div>
+			<Description view={viewMode} r={resource} c={c} />
+
+			{tags.length > 0 && <Tags tags={tags} c={c} />}
+
+			<VisitCount r={resource} />
+
+			<Actions
+				view={viewMode}
+				onFavorite={onFavorite}
+				id={id}
+				resource={resource}
+				onVisit={onVisit}
+				onEdit={onEdit}
+				onArchive={onArchive}
+				onDelete={onDelete}
+			/>
 		</motion.div>
 	);
 };

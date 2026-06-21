@@ -36,8 +36,6 @@ const ResourceGrid = ({
 		);
 	}
 
-	// console.log(resources);
-
 	return (
 		<div
 			className={

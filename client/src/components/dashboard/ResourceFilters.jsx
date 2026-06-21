@@ -38,7 +38,6 @@ const ResourceFilters = ({
 					className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-white/5 transition-all"
 				>
 					<Clock size={16} />
-					{/* {sortBy === "recent" ? "Recently Used" : "Popular"} */}
 					{sortBy === "recent" ? "Recent" : "Popular"}
 				</button>
 				<div className="flex items-center gap-1 bg-white/5 rounded-lg p-1">

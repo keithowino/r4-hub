@@ -5,6 +5,7 @@ import {
 	ChevronDownIcon,
 	ChevronRightIcon,
 	CrownIcon,
+	FolderIcon,
 	FolderOpenIcon,
 	LayoutDashboard,
 	PlusIcon,
@@ -43,16 +44,16 @@ const Sidebar = ({
 	];
 
 	const folders = [
-		{ name: "AI Tools", count: 12, color: "from-purple-500 to-pink-500" },
-		{ name: "Dev Platforms", count: 8, color: "from-blue-500 to-cyan-500" },
+		{ name: "AI Tools", count: 12, color: "#e64799" },
+		{ name: "Dev Platforms", count: 8, color: "#12acdb" },
 		{
 			name: "Cloud Services",
 			count: 6,
-			color: "from-sky-500 to-indigo-500",
+			color: "#2197eb",
 		},
-		{ name: "Code Tools", count: 10, color: "from-orange-500 to-red-500" },
-		{ name: "Learning", count: 5, color: "from-violet-500 to-purple-500" },
-		{ name: "Work Projects", count: 4, color: "from-teal-500 to-cyan-500" },
+		{ name: "Code Tools", count: 10, color: "#f24d3a" },
+		{ name: "Learning", count: 5, color: "#9b59f7" },
+		{ name: "Work Projects", count: 4, color: "#0db6bf" },
 	];
 
 	const loadResources = useCallback(async () => {
@@ -127,9 +128,12 @@ const Sidebar = ({
 									className="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-white/5 transition-colors group"
 								>
 									<div className="flex items-center gap-2">
-										<div
-											className={`w-2 h-2 rounded-full bg-gradient-to-r ${folder.color}`}
+										<FolderIcon
+											size={12}
+											color={folder.color}
+											fill={folder.color}
 										/>
+
 										<span className="text-sm text-gray-300">
 											{folder.name}
 										</span>

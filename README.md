@@ -1,1103 +1,473 @@
-I have completely revamped the entire logic/ structure. We will be working with the MERN stack architecture
+# R4 Hub 🚀
 
-```markdown
+**All your developer resources. Organized. Accessible. Powered by AI.**
+
+R4 Hub is a full-stack developer resource management platform designed to help developers organize, save, search, and quickly access technical tools, websites, and learning resources in one centralized hub.
+
+## 📖 Overview
+
+As developers continuously discover new AI tools, platforms, documentation, deployment services, databases, and experiments, browser tabs and pinned pages quickly become chaotic and difficult to manage or remember.
+
+R4 Hub solves this by providing a personal, persistent dashboard where you can:
+
+- Store and organize resources with categories and tags
+- Search across your entire library instantly
+- Mark favorites for quick access
+- Track resource usage with visit counts
+- Auto-fetch page titles from URLs
+- Access everything from a beautiful, dark-themed interface
+
+**Live Demo:** [https://r4-hub.vercel.app](https://r4-hub.vercel.app)  
+**GitHub:** [https://github.com/keithowino/r4-hub](https://github.com/keithowino/r4-hub)  
+**Portfolio:** [https://pickaxe-and-shovel.vercel.app](https://pickaxe-and-shovel.vercel.app)
+
+---
+
+## 🎯 Features
+
+### Current Features
+
+| Feature                  | Description                                           |
+| ------------------------ | ----------------------------------------------------- |
+| **User Authentication**  | Secure JWT-based registration and login               |
+| **Resource Management**  | Create, read, update, and delete resources            |
+| **Categorization**       | Organize resources by custom categories               |
+| **Tagging**              | Add multiple tags to each resource                    |
+| **Favorites**            | Star resources for quick access                       |
+| **Search**               | Full-text search across titles, URLs, tags, and notes |
+| **Visit Tracking**       | Automatic visit count and last-visited tracking       |
+| **URL Auto-fetch**       | Auto-populate titles from URLs when adding resources  |
+| **Quick Access**         | Favorite resources appear in the quick access bar     |
+| **Smart Filtering**      | Filter by category, favorites, or search terms        |
+| **Responsive Design**    | Works seamlessly on desktop and mobile                |
+| **Dark Theme**           | Modern dark UI optimized for developers               |
+| **Activity Feed**        | Recent actions and system status in the right panel   |
+| **Statistics Dashboard** | View total resources, favorites, categories, and tags |
+| **Resource Icons**       | Emoji icons with favicon fallback                     |
+
+### Planned Features
+
+- ✏️ Edit resources
+- 📦 Import/Export resources (JSON/Bookmarks)
+- ⌨️ Quick launcher (Ctrl/Cmd + K)
+- 📊 Resource analytics and insights
+- 📁 Collections/Folders
+- 💾 Prompt vault for AI prompts
+- 🖼️ Screenshots/thumbnails for resources
+- ☁️ Cloud sync across devices
+- 🔔 Resource monitoring (dead link detection)
+- 📱 Progressive Web App (PWA)
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+
+| Technology             | Purpose                                           |
+| ---------------------- | ------------------------------------------------- |
+| **React 19**           | UI framework with hooks and functional components |
+| **Vite**               | Fast build tool and development server            |
+| **React Router v7**    | Client-side routing and navigation                |
+| **Tailwind CSS**       | Utility-first styling framework                   |
+| **Framer Motion**      | Smooth animations and transitions                 |
+| **TanStack Query**     | Server state management and caching               |
+| **Axios**              | HTTP client with interceptors                     |
+| **Lucide React**       | Modern icon library                               |
+| **React Toastify**     | Toast notifications                               |
+| **React Helmet Async** | Document head management                          |
+
+### Backend
+
+| Technology     | Purpose                                |
+| -------------- | -------------------------------------- |
+| **Node.js**    | JavaScript runtime                     |
+| **Express 5**  | Web framework and API server           |
+| **MongoDB**    | NoSQL database                         |
+| **Mongoose**   | ODM for MongoDB schemas and validation |
+| **JWT**        | Authentication and authorization       |
+| **bcryptjs**   | Password hashing                       |
+| **Cloudinary** | Asset storage (planned)                |
+| **Multer**     | File upload handling (planned)         |
+
+### Development & Deployment
+
+| Technology         | Purpose                           |
+| ------------------ | --------------------------------- |
+| **Vercel**         | Frontend deployment and hosting   |
+| **Railway/Render** | Backend deployment                |
+| **Concurrently**   | Run client and server in parallel |
+| **Nodemon**        | Development server auto-restart   |
+| **ESLint**         | Code quality and linting          |
+
+---
+
+## 📁 Project Structure
+
+```
 r4-hub/
-├── client/
-│ ├── src/
-│ │ ├── assets/
-│ │ ├── components/
-│ │ | ├── common/
-│ │ | └── ...
-│ │ ├── lib/
-│ │ | ├── services/
-│ │ | | ├── authServices.js
-│ │ | | └── resourceServices.js
-│ │ | ├── context/
-│ │ | ├── axios.js
-│ │ | └── ...
-│ │ ├── pages/
-│ │ └── ...
-│ └──...
-├── server/
-│ ├── src/
-│ │ ├── controllers/
-│ │ ├── lib/
-│ │ ├── middleware/
-│ │ ├── moddels/
-│ │ ├── routes/
-│ │ ├── services/
-│ │ └── server.js
-│ └── ...
-├── .env.development
-├── .env.producction
-├── .env.example
-├── .env.package.json
-├── .env.README.md
-└── ...
-```
-
-```~/server/server.js
-import express from "express";
-import mongoose from "mongoose";
-import cors from "cors";
-import dotenv from "dotenv";
-import path from "path";
-import resourceRoutes from "./routes/resourceRoutes.js";
-import authRoutes from "./routes/authRoutes.js";
-
-/*
-// recommended for use only during development.
-import dns from "dns";
-dns.setServers(["8.8.8.8", "1.1.1.1"]);
-*/
-
-const envFile =
-	process.env.NODE_ENV === "production"
-		? ".env.production"
-		: ".env.development";
-dotenv.config({ path: envFile });
-
-const requiredEnvVars = [
-	"MONGODB_URI",
-	"JWT_SECRET",
-	"PORT",
-	"NODE_ENV",
-	"JWT_EXPIRES_IN",
-	"CLIENT_URL",
-	"CLOUDINARY_CLOUD_NAME",
-	"CLOUDINARY_API_KEY",
-	"CLOUDINARY_API_SECRET",
-];
-const missingEnvVars = requiredEnvVars.filter((envVar) => !process.env[envVar]);
-
-if (missingEnvVars.length > 0) {
-	console.error("❌ Missing required environment variables:");
-	missingEnvVars.forEach((envVar) => console.error(`   - ${envVar}`));
-	console.error("\nPlease check your .env file");
-	process.exit(1);
-}
-
-console.log(`Loading environment from: ${envFile}`);
-
-const app = express();
-
-// Middleware
-app.use(
-	cors({
-		origin: process.env.CLIENT_URL || "http://localhost:3000",
-		credentials: true,
-	}),
-);
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// Routes
-app.use("/api/auth", authRoutes);
-app.use("/api/resources", resourceRoutes);
-
-// Health check
-app.get("/api/health", (req, res) => {
-	res.json({ status: "OK", message: "Server is running" });
-});
-
-// Error handling middleware
-app.use((err, req, res, next) => {
-	console.error(err.stack);
-	res.status(err.status || 500).json({
-		message: err.message || "Something went wrong!",
-		error: process.env.NODE_ENV === "development" ? err : {},
-	});
-});
-
-// Connect to MongoDB
-mongoose
-	.connect(process.env.MONGODB_URI)
-	.then(() => {
-		console.log("✅ Connected to MongoDB");
-		const PORT = process.env.PORT || 5000;
-		app.listen(PORT, () => {
-			console.log(`🚀 Server running on port ${PORT}`);
-		});
-	})
-	.catch((error) => {
-		console.error("❌ MongoDB connection error:", error);
-		process.exit(1);
-	});
-```
-
-```~/authServices.js
-import api from "../axios.js";
-
-const TOKEN_KEY = "r4hub_token";
-const USER_KEY = "r4hub_user";
-
-// ─── Token Helpers ────────────────────────────────────────────────────────────
-
-export const saveAuth = (token, user) => {
-	localStorage.setItem(TOKEN_KEY, token);
-	localStorage.setItem(USER_KEY, JSON.stringify(user));
-};
-
-export const clearAuth = () => {
-	localStorage.removeItem(TOKEN_KEY);
-	localStorage.removeItem(USER_KEY);
-};
-
-export const getStoredToken = () => localStorage.getItem(TOKEN_KEY);
-
-export const getStoredUser = () => {
-	const user = localStorage.getItem(USER_KEY);
-	return user ? JSON.parse(user) : null;
-};
-
-// ─── Auth Calls ───────────────────────────────────────────────────────────────
-
-// POST /api/auth/register
-export const register = async ({ name, email, password }) => {
-	const res = await api.post("/auth/register", { name, email, password });
-	saveAuth(res.data.token, res.data.data);
-	return res.data;
-};
-
-// POST /api/auth/login
-export const login = async ({ email, password }) => {
-	const res = await api.post("/auth/login", { email, password });
-	saveAuth(res.data.token, res.data.data);
-	return res.data;
-};
-
-// GET /api/auth/me
-export const getMe = async () => {
-	const res = await api.get("/auth/me");
-	return res.data;
-};
-
-// PUT /api/auth/me
-export const updateMe = async ({ name, avatar }) => {
-	const res = await api.put("/auth/me", { name, avatar });
-	// Update stored user with new data
-	localStorage.setItem(USER_KEY, JSON.stringify(res.data.data));
-	return res.data;
-};
-
-// PUT /api/auth/password
-export const changePassword = async ({ currentPassword, newPassword }) => {
-	const res = await api.put("/auth/password", {
-		currentPassword,
-		newPassword,
-	});
-	// Save the new token issued after password change
-	if (res.data.token) {
-		localStorage.setItem(TOKEN_KEY, res.data.token);
-	}
-	return res.data;
-};
-
-// Logout — client side only, just clears storage
-export const logout = () => {
-	clearAuth();
-	window.location.href = "/login";
-};
-```
-
-```~/resourceServices.js
-import api from "../axios.js";
-
-// ─── Resource Calls ───────────────────────────────────────────────────────────
-
-// GET /api/resources
-// Supports optional filters: { category, favorite, status, search, tag }
-export const getResources = async (filters = {}) => {
-	const params = new URLSearchParams();
-
-	if (filters.category) params.append("category", filters.category);
-	if (filters.favorite) params.append("favorite", "true");
-	if (filters.status) params.append("status", filters.status);
-	if (filters.search) params.append("search", filters.search);
-	if (filters.tag) params.append("tag", filters.tag);
-
-	const res = await api.get(`/resources?${params.toString()}`);
-	return res.data;
-};
-
-// GET /api/resources/:id
-export const getResource = async (id) => {
-	const res = await api.get(`/resources/${id}`);
-	return res.data;
-};
-
-// POST /api/resources
-export const createResource = async (resourceData) => {
-	const res = await api.post("/resources", resourceData);
-	return res.data;
-};
-
-// PUT /api/resources/:id
-export const updateResource = async (id, resourceData) => {
-	const res = await api.put(`/resources/${id}`, resourceData);
-	return res.data;
-};
-
-// DELETE /api/resources/:id
-export const deleteResource = async (id) => {
-	const res = await api.delete(`/resources/${id}`);
-	return res.data;
-};
-
-// PATCH /api/resources/:id/favorite
-export const toggleFavorite = async (id) => {
-	const res = await api.patch(`/resources/${id}/favorite`);
-	return res.data;
-};
-
-// PATCH /api/resources/:id/visit
-export const incrementVisit = async (id) => {
-	const res = await api.patch(`/resources/${id}/visit`);
-	return res.data;
-};
-
-// PATCH /api/resources/:id/archive
-export const archiveResource = async (id) => {
-	const res = await api.patch(`/resources/${id}/archive`);
-	return res.data;
-};
-```
-
-```~/AuthContext.jsx
-import { createContext, useContext, useState, useEffect } from "react";
-import {
-	login as loginService,
-	register as registerService,
-	logout as logoutService,
-	updateMe as updateMeService,
-	changePassword as changePasswordService,
-	getMe,
-	getStoredUser,
-	getStoredToken,
-} from "../services/authService.js";
-
-const AuthContext = createContext();
-
-export const AuthContextProvider = ({ children }) => {
-	const [user, setUser] = useState(getStoredUser());
-	const [token, setToken] = useState(getStoredToken());
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
-
-	const isAuthenticated = !!token && !!user;
-
-	// On mount — verify stored token is still valid against the server
-	useEffect(() => {
-		const verifyToken = async () => {
-			if (!token) {
-				setLoading(false);
-				return;
-			}
-			try {
-				const res = await getMe();
-				setUser(res.data);
-			} catch {
-				// Token invalid or expired — clear everything
-				setUser(null);
-				setToken(null);
-			} finally {
-				setLoading(false);
-			}
-		};
-
-		verifyToken();
-	}, []);
-
-	const login = async (credentials) => {
-		setError(null);
-		try {
-			const res = await loginService(credentials);
-			setUser(res.data);
-			setToken(res.token);
-			return res;
-		} catch (err) {
-			const message =
-				err.response?.data?.message || "Login failed, please try again";
-			setError(message);
-			throw new Error(message);
-		}
-	};
-
-	const register = async (credentials) => {
-		setError(null);
-		try {
-			const res = await registerService(credentials);
-			setUser(res.data);
-			setToken(res.token);
-			return res;
-		} catch (err) {
-			const message =
-				err.response?.data?.message ||
-				"Registration failed, please try again";
-			setError(message);
-			throw new Error(message);
-		}
-	};
-
-	const logout = () => {
-		setUser(null);
-		setToken(null);
-		logoutService();
-	};
-
-	const updateMe = async (data) => {
-		setError(null);
-		try {
-			const res = await updateMeService(data);
-			setUser(res.data);
-			return res;
-		} catch (err) {
-			const message =
-				err.response?.data?.message ||
-				"Update failed, please try again";
-			setError(message);
-			throw new Error(message);
-		}
-	};
-
-	const changePassword = async (data) => {
-		setError(null);
-		try {
-			const res = await changePasswordService(data);
-			setToken(res.token);
-			return res;
-		} catch (err) {
-			const message =
-				err.response?.data?.message ||
-				"Password change failed, please try again";
-			setError(message);
-			throw new Error(message);
-		}
-	};
-
-	const clearError = () => setError(null);
-
-	return (
-		<AuthContext.Provider
-			value={{
-				user,
-				token,
-				loading,
-				error,
-				isAuthenticated,
-				login,
-				register,
-				logout,
-				updateMe,
-				changePassword,
-				clearError,
-			}}
-		>
-			{children}
-		</AuthContext.Provider>
-	);
-};
-
-export const useAuth = () => {
-	const ctx = useContext(AuthContext);
-	if (!ctx) {
-		throw new Error("useAuth must be used within an AuthContextProvider");
-	}
-	return ctx;
-};
-```
-
-Now that the backend has been built let's towards reconditioning the frontend.
-
-Yes. The image provides much more than text—it defines an entire product structure, information architecture, design system, layout hierarchy, component library, and interaction model.
-
-Instead of asking the other LLM to "copy the image," you will get better results if you provide it with a detailed UX/UI specification.
-
----
-
-# Product Vision
-
-Build a modern developer resource management platform called **R4 Hub**.
-
-Purpose:
-
-- Allow developers to organize resources, tools, documentation, platforms, databases, cloud services, and learning materials.
-- Act as a personal developer dashboard.
-- Enable bookmarking, tagging, categorization, searching, and quick access.
-- Present resources in a visually appealing productivity-focused workspace.
-
-The design should feel like:
-
-- GitHub + Notion + Raycast + Linear + Vercel
-- Dark mode first
-- Futuristic but professional
-- Premium SaaS dashboard
-- Neon blue / purple cyber aesthetic
-
----
-
-# Layout Structure
-
-The application is split into 3 major sections:
-
-```text
-┌────────────────────────────────────────────────────┐
-│                    TOP NAVBAR                      │
-├───────────────┬───────────────────────┬────────────┤
-│               │                       │            │
-│ LEFT SIDEBAR  │   MAIN CONTENT AREA   │ RIGHT PANEL│
-│               │                       │            │
-└───────────────┴───────────────────────┴────────────┘
+├── client/                          # React frontend
+│   ├── src/
+│   │   ├── assets/                  # Images, fonts, etc.
+│   │   ├── components/
+│   │   │   ├── common/              # Shared components
+│   │   │   │   ├── Navbar.jsx
+│   │   │   │   ├── Sidebar.jsx
+│   │   │   │   ├── RightPanel.jsx
+│   │   │   │   ├── Layout.jsx
+│   │   │   │   └── Logo.jsx
+│   │   │   ├── dashboard/           # Dashboard-specific components
+│   │   │   │   ├── ResourceCard.jsx
+│   │   │   │   ├── ResourceGrid.jsx
+│   │   │   │   ├── ResourceFilters.jsx
+│   │   │   │   ├── QuickAccess.jsx
+│   │   │   │   └── SearchBar.jsx
+│   │   │   ├── home/                # Landing page components
+│   │   │   │   ├── Navbar.jsx
+│   │   │   │   └── Footer.jsx
+│   │   │   └── modals/              # Modal components
+│   │   │       └── AddResourceModal.jsx
+│   │   ├── hooks/                   # Custom React hooks
+│   │   │   └── useResources.js
+│   │   ├── lib/                     # Core libraries
+│   │   │   ├── axios.js             # HTTP client with interceptors
+│   │   │   ├── context/
+│   │   │   │   ├── AuthContext.jsx  # Authentication state
+│   │   │   │   └── CommonContext.jsx # Shared app state
+│   │   │   ├── services/
+│   │   │   │   ├── authService.js   # Authentication API calls
+│   │   │   │   └── resourceService.js # Resource API calls
+│   │   │   └── data.js              # Static data
+│   │   ├── pages/                   # Page components
+│   │   │   ├── Home.jsx             # Landing page
+│   │   │   ├── Dashboard.jsx        # Main dashboard
+│   │   │   ├── Favorites.jsx        # Favorites view
+│   │   │   ├── Categories.jsx       # Categories view
+│   │   │   └── auth/
+│   │   │       ├── Login.jsx        # Login page
+│   │   │       └── Register.jsx     # Registration page
+│   │   ├── utils/                   # Utility functions
+│   │   │   └── constants.js         # App constants
+│   │   ├── App.jsx                  # Main App component
+│   │   ├── main.jsx                 # Entry point
+│   │   └── index.css                # Global styles
+│   ├── index.html
+│   ├── package.json
+│   ├── vite.config.js
+│   ├── tailwind.config.js
+│   └── postcss.config.js
+│
+├── server/                          # Express backend
+│   ├── src/
+│   │   ├── controllers/             # Request handlers
+│   │   │   ├── authController.js
+│   │   │   └── resourceController.js
+│   │   ├── middleware/              # Express middleware
+│   │   │   ├── auth.js              # JWT authentication
+│   │   │   └── error.js             # Error handling
+│   │   ├── models/                  # Mongoose models
+│   │   │   ├── User.js
+│   │   │   └── Resource.js
+│   │   ├── routes/                  # API routes
+│   │   │   ├── authRoutes.js
+│   │   │   └── resourceRoutes.js
+│   │   ├── services/                # Business logic
+│   │   └── server.js                # Server entry point
+│   ├── package.json
+│   └── .env.example
+│
+├── package.json                     # Root workspace scripts
+├── .env.development                 # Development environment variables
+├── .env.production                  # Production environment variables
+└── README.md
 ```
 
 ---
 
-# 1. Top Navigation Bar
+## 🚀 Getting Started
 
-Fixed at the top.
+### Prerequisites
 
-Contains:
+- Node.js (v18 or higher)
+- MongoDB Atlas account (or local MongoDB)
+- npm or yarn
 
-### Navigation Tabs
+### 1. Fork the Repository
 
-```text
-Dashboard
-AI Tools
-Platforms
-Cloud
-Dev Tools
-Resources
+Visit: [https://github.com/keithowino/r4-hub](https://github.com/keithowino/r4-hub)
+
+Click the **Fork** button to create your own copy.
+
+### 2. Clone Your Fork
+
+```bash
+git clone https://github.com/YOUR_USERNAME/r4-hub.git
+cd r4-hub
 ```
 
-### Utility Actions
+### 3. Install Dependencies
 
-Right side:
+Install all dependencies (client, server, and root):
 
-```text
-Search icon
-Keyboard shortcut hint
-Notifications bell
-User avatar
+```bash
+npm run install:all
 ```
 
-Behavior:
+Or individually:
 
-- Active tab highlighted.
-- Smooth hover animations.
-- Glassmorphism background.
+```bash
+# Install root dependencies
+npm install
+
+# Install server dependencies
+npm run install:server
+
+# Install client dependencies
+npm run install:client
+```
+
+### 4. Environment Setup
+
+#### Backend Environment Variables
+
+Create `server/.env.development`:
+
+```env
+PORT=5000
+NODE_ENV=development
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret_key
+JWT_EXPIRES_IN=7d
+CLIENT_URL=http://localhost:5173
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+```
+
+#### Frontend Environment Variables
+
+Create `client/.env.development`:
+
+```env
+VITE_API_URL=http://localhost:5000/api
+```
+
+### 5. Start Development Servers
+
+**Option A: Run both client and server concurrently (recommended):**
+
+```bash
+npm run dev
+```
+
+**Option B: Run separately:**
+
+```bash
+# Terminal 1 - Server
+npm run server
+
+# Terminal 2 - Client
+npm run client
+```
+
+**Access the app:**
+
+- Frontend: [http://localhost:5173](http://localhost:5173)
+- API: [http://localhost:5000/api](http://localhost:5000/api)
+- Health check: [http://localhost:5000/api/health](http://localhost:5000/api/health)
 
 ---
 
-# 2. Left Sidebar
+## 📜 Available Scripts
 
-Vertical navigation panel.
+### From Root Directory
 
-## Brand Section
+| Command                   | Description                                       |
+| ------------------------- | ------------------------------------------------- |
+| `npm run dev`             | Start both client and server in development mode  |
+| `npm run server`          | Start only the backend server                     |
+| `npm run client`          | Start only the frontend development server        |
+| `npm run dev:server-only` | Start server only                                 |
+| `npm run dev:client-only` | Start client only                                 |
+| `npm run install:all`     | Install dependencies for client, server, and root |
+| `npm run install:server`  | Install server dependencies                       |
+| `npm run install:client`  | Install client dependencies                       |
+| `npm run clean`           | Remove all node_modules folders                   |
+| `npm run clean:install`   | Clean and reinstall all dependencies              |
+| `npm run status`          | Show running services and ports                   |
+| `npm run build`           | Build both client and server for production       |
 
-Top:
+### From Client Directory
 
-```text
-R4 Hub
-```
+| Command           | Description              |
+| ----------------- | ------------------------ |
+| `npm run dev`     | Start Vite dev server    |
+| `npm run build`   | Build for production     |
+| `npm run preview` | Preview production build |
+| `npm run lint`    | Run ESLint               |
 
-with logo.
+### From Server Directory
 
----
-
-## Main Navigation
-
-Menu items:
-
-```text
-Dashboard
-Favorites
-All Resources
-Categories
-```
-
-Use icons.
-
-Active state:
-
-- Filled background
-- Blue glow
-
----
-
-## Folder Section
-
-Heading:
-
-```text
-Folders
-```
-
-Items:
-
-```text
-AI Tools
-Dev Platforms
-Cloud Services
-Code Tools
-Learning
-Work Projects
-```
-
-Features:
-
-- Expand/collapse
-- Folder counts
-- Add folder button
+| Command                 | Description                             |
+| ----------------------- | --------------------------------------- |
+| `npm run dev`           | Start server with nodemon (auto-reload) |
+| `npm run start`         | Start server in production              |
+| `npm run traceWarnings` | Start with Node.js trace warnings       |
 
 ---
 
-## Tags Section
+## 🗺️ API Endpoints
 
-Tag pills:
+### Authentication
 
-```text
-AI
-Backend
-Frontend
-Cloud
-Database
-DevOps
-Security
-Productivity
-```
+| Method | Endpoint             | Description         | Auth    |
+| ------ | -------------------- | ------------------- | ------- |
+| POST   | `/api/auth/register` | Register new user   | Public  |
+| POST   | `/api/auth/login`    | Login user          | Public  |
+| GET    | `/api/auth/me`       | Get current user    | Private |
+| PUT    | `/api/auth/me`       | Update user profile | Private |
+| PUT    | `/api/auth/password` | Change password     | Private |
 
-Each tag:
+### Resources
 
-- Color coded
-- Clickable filter
+| Method | Endpoint                      | Description           | Auth    |
+| ------ | ----------------------------- | --------------------- | ------- |
+| GET    | `/api/resources`              | Get all resources     | Private |
+| GET    | `/api/resources/:id`          | Get single resource   | Private |
+| POST   | `/api/resources`              | Create resource       | Private |
+| PUT    | `/api/resources/:id`          | Update resource       | Private |
+| DELETE | `/api/resources/:id`          | Delete resource       | Private |
+| PATCH  | `/api/resources/:id/favorite` | Toggle favorite       | Private |
+| PATCH  | `/api/resources/:id/visit`    | Increment visit count | Private |
+| PATCH  | `/api/resources/:id/archive`  | Archive resource      | Private |
 
----
+**Query Parameters for GET `/api/resources`:**
 
-## Upgrade Card
-
-Bottom promotional widget.
-
-Contains:
-
-```text
-Upgrade to Pro
-Unlock extra features
-Custom themes
-Advanced analytics
-```
-
-CTA:
-
-```text
-Upgrade Now
-```
+| Parameter  | Description        | Example                |
+| ---------- | ------------------ | ---------------------- |
+| `category` | Filter by category | `?category=AI%20Tools` |
+| `favorite` | Filter favorites   | `?favorite=true`       |
+| `status`   | Filter by status   | `?status=active`       |
+| `search`   | Full-text search   | `?search=chatgpt`      |
+| `tag`      | Filter by tag      | `?tag=AI`              |
 
 ---
 
-# 3. Main Content Area
-
-The largest section.
-
----
-
-## Global Search
-
-Large search bar.
-
-Placeholder:
-
-```text
-Search resources, tools, docs...
-```
-
-Features:
-
-- Full-text search
-- Keyboard shortcut display
-- Instant filtering
-
----
-
-## Quick Access Section
-
-Horizontal card row.
-
-Cards represent favorites.
-
-Examples:
-
-```text
-ChatGPT
-GitHub
-Supabase
-Vercel
-```
-
-Each card contains:
-
-- Logo
-- Name
-- Category
-- Favorite star
-- Hover effect
-
-Additional card:
-
-```text
-+ Add New
-```
-
----
-
-## Resource Filters
-
-Toolbar below Quick Access.
-
-Filters:
-
-```text
-All
-AI Tools
-Dev Platforms
-Databases
-Cloud
-Code Tools
-More
-```
-
-Secondary controls:
-
-```text
-Recently Used
-Grid View
-List View
-```
-
----
-
-## Resources Grid
-
-Main feature.
-
-Responsive card grid.
-
-Desktop:
-
-```text
-4 columns
-```
-
-Tablet:
-
-```text
-2 columns
-```
-
-Mobile:
-
-```text
-1 column
-```
-
----
-
-# Resource Card Structure
-
-Each card contains:
-
-### Header
-
-```text
-Logo
-Name
-Favorite Star
-```
-
-### Metadata
-
-```text
-Category
-Short description
-```
-
-### Tags
-
-Example:
-
-```text
-AI
-Productivity
-
-Database
-Backend
-
-Cloud
-Hosting
-```
-
-### Hover Effects
-
-- Elevation
-- Glow
-- Scale 1.02
-- Smooth transitions
-
----
-
-## Example Resources
-
-### AI
-
-```text
-ChatGPT
-Claude
-Gemini
-Cursor
-```
-
-### Code Hosting
-
-```text
-GitHub
-GitLab
-Bitbucket
-```
-
-### Databases
-
-```text
-Supabase
-PostgreSQL
-MongoDB
-Firebase
-```
-
-### Cloud
-
-```text
-AWS
-Azure
-Cloudflare
-Vercel
-Netlify
-```
-
-### Productivity
-
-```text
-Notion
-Linear
-Figma
-```
-
----
-
-# Right Sidebar
-
-Analytics and widgets.
-
-Fixed width.
-
----
-
-## Summary Widget
-
-Displays:
-
-```text
-Total Resources
-Favorites
-Categories
-Tags
-```
-
-Example:
-
-```text
-128 Resources
-23 Favorites
-12 Categories
-28 Tags
-```
-
----
-
-## Activity Feed
-
-Shows recent actions.
-
-Examples:
-
-```text
-Added Vercel
-Favorited GitHub
-Added Supabase
-Viewed AWS Console
-```
-
-Include:
-
-- Timestamp
-- Icon
-- Activity type
-
----
-
-## Developer Widget
-
-Code-themed productivity widget.
-
-Example:
-
-```javascript
-const hub = new R4Hub();
-
-hub.search("database")
-	.filter((r) => r.favorite)
-	.sort("recent")
-	.get();
-```
-
-Purpose:
-
-Purely visual.
-
-Adds developer personality.
-
----
-
-## System Status Widget
-
-Status indicators:
-
-```text
-API
-Database
-Search
-Sync
-```
-
-Green dot:
-
-```text
-Operational
-```
-
----
-
-# Landing Page Influence
-
-The left side of the image actually resembles a landing page.
-
-Include:
-
-## Hero Section
-
-```text
-All your developer resources.
-Organized.
-Accessible.
-Powered by AI.
-```
-
-CTA:
-
-```text
-Developer Resource Management Dashboard
-```
-
----
-
-## Feature Highlights
-
-1.
-
-```text
-Organize AI tools, platforms and technical resources
-```
-
-2.
-
-```text
-Smart organization with tags, folders and favorites
-```
-
-3.
-
-```text
-Quick access to frequently used resources
-```
-
-4.
-
-```text
-Built for developers, designed for productivity
-```
-
----
-
-# Design System
-
-## Colors
-
-Primary:
+## 🎨 Design System
+
+### Color Palette
+
+| Color           | Value     | Usage                          |
+| --------------- | --------- | ------------------------------ |
+| Background      | `#0d0f14` | Primary background             |
+| Card Background | `#161920` | Secondary background           |
+| Border          | `#2a3044` | Subtle borders                 |
+| Primary         | `#6c63ff` | Primary actions and highlights |
+| Text Primary    | `#e8eaf0` | Main text                      |
+| Text Secondary  | `#8b9ab8` | Secondary text                 |
+| Text Muted      | `#3a4260` | Muted text                     |
+
+### Typography
 
 ```css
-#2563EB
-#3B82F6
-#60A5FA
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 ```
 
-Secondary:
+### Animations
 
-```css
-#7C3AED
-#8B5CF6
-```
-
-Background:
-
-```css
-#030712
-#0A0F1F
-#0F172A
-```
-
-Accent Glow:
-
-```css
-#00D4FF
-#6366F1
-#8B5CF6
-```
+- **Hover:** TranslateY, scale, and glow effects
+- **Transitions:** 0.15-0.2s ease
+- **Modals:** Spring animations with Framer Motion
+- **Loading:** Spinner with rotation animation
 
 ---
 
-## Typography
+## 🚢 Deployment
 
-Use:
+### Frontend (Vercel)
 
-```text
-Inter
-Manrope
-Space Grotesk
-```
+1. Push your repository to GitHub
+2. Visit [Vercel](https://vercel.com) and sign in
+3. Click "Add New Project"
+4. Import your GitHub repository
+5. Add environment variables:
+    - `VITE_API_URL` - Your deployed backend URL
+6. Deploy
 
-Hierarchy:
+### Backend (Railway/Render/Heroku)
 
-```text
-H1: 48–60px
-H2: 32–40px
-H3: 24–28px
-Body: 14–16px
-```
-
----
-
-## Effects
-
-### Cards
-
-```css
-backdrop-filter: blur(20px);
-border: 1px solid rgba(255, 255, 255, 0.08);
-```
-
-### Hover
-
-```css
-transform: translateY(-2px);
-```
-
-### Glow
-
-```css
-box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
-```
-
-### Corners
-
-```css
-border-radius: 16px;
-```
+1. Choose a hosting provider (Railway, Render, or Heroku)
+2. Connect your GitHub repository
+3. Add environment variables:
+    - `PORT=5000`
+    - `NODE_ENV=production`
+    - `MONGODB_URI` - Production MongoDB connection
+    - `JWT_SECRET` - Secure JWT secret
+    - `JWT_EXPIRES_IN=7d`
+    - `CLIENT_URL` - Your deployed frontend URL
+    - Cloudinary credentials (if using)
+4. Deploy
 
 ---
 
-# MERN Backend Entities
+## 🤝 Contributing
 
-Based on the UI, your backend should support:
+Contributions, issues, and feature requests are welcome!
 
-## Resource
+1. **Fork the repository**
+2. **Create a feature branch:**
 
-```js
-{
-  _id,
-  name,
-  description,
-  url,
-  logo,
-  category,
-  tags: [],
-  favorite,
-  folderId,
-  lastUsed,
-  createdAt
-}
+```bash
+git checkout -b feature/amazing-feature
 ```
 
-## Folder
+3. **Commit your changes:**
 
-```js
-{
-	(_id, name, icon, color);
-}
+```bash
+git commit -m 'Add amazing feature'
 ```
 
-## Tag
+4. **Push to the branch:**
 
-```js
-{
-	(_id, name, color);
-}
+```bash
+git push origin feature/amazing-feature
 ```
 
-## Activity
+5. **Open a Pull Request**
 
-```js
-{
-	(_id, action, resourceId, timestamp);
-}
-```
+### Development Guidelines
 
-## User
-
-```js
-{
-	(_id, name, email, avatar, preferences);
-}
-```
+- Follow the existing code style
+- Write meaningful commit messages
+- Test your changes before submitting
+- Update documentation when needed
 
 ---
 
-# Frontend Stack Recommendation
+## 📄 License
 
-Since you're already using MERN:
+This project is proprietary software. All rights reserved.
 
-```text
-React
-React Router
-Tailwind CSS
-Framer Motion
-Lucide React
-React Query / TanStack Query
-Axios
-```
+© 2024 Keith Owino. All rights reserved.
 
-Optional:
+---
 
-```text
-shadcn/ui
-Radix UI
-```
+## 📬 Contact
 
-If you give this specification to the other LLM, it should be able to recreate approximately 90–95% of the UX/UI shown in the image without needing image analysis capabilities.
+**Keith Owino**
+
+- 📧 Email: [designsolutions1629@gmail.com](mailto:designsolutions1629@gmail.com)
+- 🔗 Portfolio: [https://pickaxe-and-shovel.vercel.app](https://pickaxe-and-shovel.vercel.app)
+- 🐙 GitHub: [https://github.com/keithowino](https://github.com/keithowino)
+- 🐦 Twitter: [@keithowino](https://twitter.com/keithowino)
+
+---
+
+## 🙏 Acknowledgments
+
+- Built with ❤️ by Keith Owino
+- Special thanks to the open-source community for the amazing tools and libraries
+
+---
+
+**Star the repository if you find it useful! ⭐**

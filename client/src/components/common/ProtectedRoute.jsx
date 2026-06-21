@@ -31,19 +31,6 @@ const ProtectedRoute = ({ children }) => {
 	return children; // ← Return children instead of Outlet
 };
 
-// // Wraps public routes — redirects to /dashboard if already logged in
-// export const PublicOnlyRoute = ({ children }) => {
-// 	// ← Accept children prop
-// 	const { isAuthenticated, loading } = useAuth();
-
-// 	if (loading) return <AuthLoader />;
-
-// 	if (isAuthenticated) {
-// 		return <Navigate to="/overview" replace />;
-// 	}
-
-// 	return children; // ← Return children instead of Outlet
-// };
 export const PublicOnlyRoute = () => {
 	const { isAuthenticated, loading } = useAuth();
 

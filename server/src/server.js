@@ -25,9 +25,6 @@ const requiredEnvVars = [
 	"NODE_ENV",
 	"JWT_EXPIRES_IN",
 	"CLIENT_URL",
-	"CLOUDINARY_CLOUD_NAME",
-	"CLOUDINARY_API_KEY",
-	"CLOUDINARY_API_SECRET",
 ];
 const missingEnvVars = requiredEnvVars.filter((envVar) => !process.env[envVar]);
 

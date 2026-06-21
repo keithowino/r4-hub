@@ -1,12 +1,12 @@
 import { useState } from "react";
 
-export const RIcon = ({ c, md = "11", imgd = "5", resource }) => {
+export const RIcon = ({ c, md = "9", imgd = "3", resource }) => {
 	const [imgErr, setImgErr] = useState(false);
 
 	return (
 		<div
 			// className={`w-${md} h-${md} rounded-xl flex items-center justify-center flex-shrink-0`}
-			className={`${imgErr ? `w-${md} h-${md} rounded-xl flex items-center justify-center flex-shrink-0` : ""}`}
+			className={`${imgErr ? `flex items-center justify-center flex-shrink-0` : ""} w-${md} h-${md} rounded-xl`}
 			style={{
 				background: `${imgErr && c.bg}`,
 				border: `${imgErr && `1px solid ${c.border}`}`,
@@ -17,8 +17,8 @@ export const RIcon = ({ c, md = "11", imgd = "5", resource }) => {
 				<img
 					src={resource.favicon}
 					alt=""
-					// className={`w-${imgd} h-${imgd} object-contain`}
-					className={`w-${md} h-${md} object-contain`}
+					className={`w-${imgd} h-${imgd} object-contain`}
+					// className={`w-${md} h-${md} object-contain`}
 					onError={() => setImgErr(true)}
 				/>
 			) : resource.icon ? (

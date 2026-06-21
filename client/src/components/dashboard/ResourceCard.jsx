@@ -284,7 +284,7 @@ const GridCard = ({
 			<div className="p-4 flex flex-col flex-1">
 				{/* Top row: icon + star */}
 				<div className="flex items-start justify-between mb-3">
-					<RIcon c={c} md={"11"} imgd={"5"} resource={resource} />
+					<RIcon c={c} md={"9"} imgd={"3"} resource={resource} />
 
 					{/* Star */}
 					<button

@@ -63,7 +63,7 @@ const Dashboard = () => {
 			</div>
 
 			{/* Quick Access */}
-			<QuickAccess resources={sortedResources} />
+			<QuickAccess resources={sortedResources} onVisit={incrementVisit} />
 
 			{/* Filters */}
 			<ResourceFilters

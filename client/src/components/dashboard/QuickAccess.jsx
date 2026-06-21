@@ -93,7 +93,7 @@ const CAT_COLORS = {
 
 const getCat = (cat) => CAT_COLORS[cat] || CAT_COLORS.Other;
 
-const QuickAccess = ({ resources = [] }) => {
+const QuickAccess = ({ resources = [], onVisit }) => {
 	const { setIsAddResModalOpen } = useCommon();
 
 	const favorites = resources.filter((r) => r.favorite).slice(0, 5);
@@ -106,13 +106,15 @@ const QuickAccess = ({ resources = [] }) => {
 			<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
 				{favorites.map((resource) => {
 					const c = getCat(resource.category);
+					const id = resource._id || resource.id;
 
 					return (
 						<motion.a
-							key={resource._id || resource.id}
+							key={id}
 							href={resource.url}
 							target="_blank"
 							rel="noopener noreferrer"
+							onClick={() => onVisit?.(id)}
 							whileHover={{ y: -2, scale: 1.02 }}
 							className="relative p-4 rounded-xl bg-white/5 backdrop-blur-sm border border-white/5 hover:border-white/10 transition-all group"
 						>

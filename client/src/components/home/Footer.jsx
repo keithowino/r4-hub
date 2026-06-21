@@ -20,10 +20,11 @@ const Footer = () => {
 					}}
 				/>
 				<p className="text-xs text-[#3a4260]">
-					© {new Date().getFullYear()}{" "}
-					{data.metadata.parentCompany.name}. All rights reserved.
+					© {new Date().getFullYear()} {data.metadata.name}. All
+					rights reserved.
 				</p>
 				<p className="text-xs text-[#3a4260]">
+					Powered by{" "}
 					<a
 						href={data.metadata.parentCompany.liveLink}
 						style={styles.footerLink}
@@ -48,12 +49,12 @@ const Footer = () => {
 					}}
 				/>
 				<p className="text-xs text-[#3a4260] text-center">
-					© {new Date().getFullYear()}{" "}
-					{data.metadata.parentCompany.name}.
+					© {new Date().getFullYear()} {data.metadata.name}.
 					<br />
 					All rights reserved.
 				</p>
 				<p className="text-xs text-[#3a4260]">
+					Powered by{" "}
 					<a
 						href={data.metadata.parentCompany.liveLink}
 						style={styles.footerLink}

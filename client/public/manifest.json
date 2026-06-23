@@ -1,0 +1,41 @@
+{
+	"name": "R4 Hub - Developer Resource Management",
+	"short_name": "R4 Hub",
+	"description": "Organize, save, and access all your developer resources in one place.",
+	"start_url": "/",
+	"display": "standalone",
+	"theme_color": "#0d0f14",
+	"background_color": "#0d0f14",
+	"orientation": "portrait-primary",
+	"icons": [
+		{
+			"src": "/favicon-192x192.png",
+			"sizes": "192x192",
+			"type": "image/png",
+			"purpose": "any maskable"
+		},
+		{
+			"src": "/favicon-512x512.png",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "any maskable"
+		}
+	],
+	"categories": ["developer tools", "productivity", "utilities"],
+	"screenshots": [
+		{
+			"src": "/screenshot-desktop.jpeg",
+			"sizes": "1280x720",
+			"type": "image/jpeg",
+			"form_factor": "wide",
+			"label": "R4 Hub Dashboard"
+		},
+		{
+			"src": "/screenshot-mobile.jpeg",
+			"sizes": "360x720",
+			"type": "image/jpeg",
+			"form_factor": "narrow",
+			"label": "R4 Hub Home page Mobile View"
+		}
+	]
+}

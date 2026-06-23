@@ -45,7 +45,13 @@ const Home = () => {
 
 	return (
 		<>
-			<MetaDataInsert title={data.metadata.name} />
+			<MetaDataInsert
+				title="R4 Hub - All Your Developer Resources, Organized"
+				description="The ultimate developer resource management platform. Organize, save, and quickly access all your developer tools, AI platforms, documentation, and learning resources in one centralized hub."
+				keywords="developer tools, resource management, AI tools, dev resources, bookmark manager, developer dashboard"
+				url="https://r4-hub.vercel.app"
+				type="website"
+			/>
 
 			<section>
 				{/* Grid background */}

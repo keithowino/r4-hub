@@ -37,7 +37,9 @@ const StatCard = ({ icon: Icon, label, value, color }) => (
 			<Icon size={16} style={{ color }} />
 		</div>
 		<div className="text-2xl font-bold text-white">{value}</div>
-		<div className="text-xs" style={{ color: "rgba(255,255,255,0.35)" }}>{label}</div>
+		<div className="text-xs" style={{ color: "rgba(255,255,255,0.35)" }}>
+			{label}
+		</div>
 	</div>
 );
 
@@ -56,7 +58,10 @@ const Section = ({ title, subtitle, children }) => (
 		<div className="mb-5">
 			<h2 className="text-base font-semibold text-white">{title}</h2>
 			{subtitle && (
-				<p className="text-xs mt-0.5" style={{ color: "rgba(255,255,255,0.35)" }}>
+				<p
+					className="text-xs mt-0.5"
+					style={{ color: "rgba(255,255,255,0.35)" }}
+				>
 					{subtitle}
 				</p>
 			)}
@@ -69,7 +74,10 @@ const Section = ({ title, subtitle, children }) => (
 
 const Field = ({ label, icon: Icon, children }) => (
 	<div className="flex flex-col gap-1.5">
-		<label className="text-xs font-medium" style={{ color: "rgba(255,255,255,0.45)" }}>
+		<label
+			className="text-xs font-medium"
+			style={{ color: "rgba(255,255,255,0.45)" }}
+		>
 			{label}
 		</label>
 		<div className="relative">
@@ -142,11 +150,16 @@ const Profile = () => {
 		? new Date(user.createdAt).toLocaleDateString("en-US", {
 				month: "long",
 				year: "numeric",
-		  })
+			})
 		: "—";
 
 	const initials = user?.name
-		? user.name.split(" ").map((n) => n[0]).slice(0, 2).join("").toUpperCase()
+		? user.name
+				.split(" ")
+				.map((n) => n[0])
+				.slice(0, 2)
+				.join("")
+				.toUpperCase()
 		: "?";
 
 	const handleProfileSave = async (e) => {
@@ -182,7 +195,11 @@ const Profile = () => {
 				newPassword: passwordForm.newPassword,
 			});
 			toast.success("Password updated");
-			setPasswordForm({ currentPassword: "", newPassword: "", confirmPassword: "" });
+			setPasswordForm({
+				currentPassword: "",
+				newPassword: "",
+				confirmPassword: "",
+			});
 		} catch {
 			toast.error("Current password is incorrect");
 		} finally {
@@ -192,10 +209,13 @@ const Profile = () => {
 
 	return (
 		<>
-			<MetaDataInsert title="Profile" />
+			<MetaDataInsert
+				title={`${user?.name ? user.name : "User"} Profile`}
+				description="Start organizing your developer resources today."
+				noIndex={true}
+			/>
 
 			<div className="max-w-4xl mx-auto px-4 py-8 space-y-6">
-
 				{/* ── Hero card ── */}
 				<motion.div
 					initial={{ opacity: 0, y: 16 }}
@@ -210,7 +230,8 @@ const Profile = () => {
 					<div
 						className="h-24"
 						style={{
-							background: "linear-gradient(135deg, rgba(108,99,255,0.4) 0%, rgba(59,130,246,0.3) 50%, rgba(168,85,247,0.3) 100%)",
+							background:
+								"linear-gradient(135deg, rgba(108,99,255,0.4) 0%, rgba(59,130,246,0.3) 50%, rgba(168,85,247,0.3) 100%)",
 						}}
 					/>
 
@@ -220,7 +241,8 @@ const Profile = () => {
 							<div
 								className="w-16 h-16 rounded-2xl flex items-center justify-center text-xl font-bold text-white border-2 flex-shrink-0"
 								style={{
-									background: "linear-gradient(135deg, #6c63ff, #3b82f6)",
+									background:
+										"linear-gradient(135deg, #6c63ff, #3b82f6)",
 									borderColor: "#0d0f14",
 								}}
 							>
@@ -239,21 +261,35 @@ const Profile = () => {
 							</div>
 						</div>
 
-						<h1 className="text-xl font-bold text-white mb-0.5">{user?.name}</h1>
-						<p className="text-sm mb-3" style={{ color: "rgba(255,255,255,0.4)" }}>
+						<h1 className="text-xl font-bold text-white mb-0.5">
+							{user?.name}
+						</h1>
+						<p
+							className="text-sm mb-3"
+							style={{ color: "rgba(255,255,255,0.4)" }}
+						>
 							{user?.email}
 						</p>
 
 						<div className="flex flex-wrap gap-4">
-							<div className="flex items-center gap-1.5 text-xs" style={{ color: "rgba(255,255,255,0.35)" }}>
+							<div
+								className="flex items-center gap-1.5 text-xs"
+								style={{ color: "rgba(255,255,255,0.35)" }}
+							>
 								<CalendarIcon size={12} />
 								Member since {memberSince}
 							</div>
-							<div className="flex items-center gap-1.5 text-xs" style={{ color: "rgba(255,255,255,0.35)" }}>
+							<div
+								className="flex items-center gap-1.5 text-xs"
+								style={{ color: "rgba(255,255,255,0.35)" }}
+							>
 								<EyeIcon size={12} />
 								{stats.totalVisits} total visits
 							</div>
-							<div className="flex items-center gap-1.5 text-xs" style={{ color: "rgba(255,255,255,0.35)" }}>
+							<div
+								className="flex items-center gap-1.5 text-xs"
+								style={{ color: "rgba(255,255,255,0.35)" }}
+							>
 								<ShieldIcon size={12} />
 								{user?.role || "user"}
 							</div>
@@ -263,27 +299,52 @@ const Profile = () => {
 
 				{/* ── Stats row ── */}
 				<div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-					<StatCard icon={DatabaseIcon} label="Resources"  value={stats.total}      color="#6c63ff" />
-					<StatCard icon={StarIcon}     label="Favorites"  value={stats.favorites}  color="#f59e0b" />
-					<StatCard icon={FolderIcon}   label="Categories" value={stats.categories} color="#a855f7" />
-					<StatCard icon={TagIcon}      label="Tags"       value={stats.tags}       color="#14b8a6" />
+					<StatCard
+						icon={DatabaseIcon}
+						label="Resources"
+						value={stats.total}
+						color="#6c63ff"
+					/>
+					<StatCard
+						icon={StarIcon}
+						label="Favorites"
+						value={stats.favorites}
+						color="#f59e0b"
+					/>
+					<StatCard
+						icon={FolderIcon}
+						label="Categories"
+						value={stats.categories}
+						color="#a855f7"
+					/>
+					<StatCard
+						icon={TagIcon}
+						label="Tags"
+						value={stats.tags}
+						color="#14b8a6"
+					/>
 				</div>
 
 				<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
 					{/* ── Edit profile ── */}
 					<Section
 						title="Profile Details"
 						subtitle="Update your display name and account info."
 					>
-						<form onSubmit={handleProfileSave} className="space-y-4">
+						<form
+							onSubmit={handleProfileSave}
+							className="space-y-4"
+						>
 							<Field label="Full Name" icon={UserIcon}>
 								<Input
 									icon
 									type="text"
 									value={profileForm.name}
 									onChange={(e) =>
-										setProfileForm({ ...profileForm, name: e.target.value })
+										setProfileForm({
+											...profileForm,
+											name: e.target.value,
+										})
 									}
 									placeholder="Your name"
 									required
@@ -303,7 +364,10 @@ const Profile = () => {
 										paddingLeft: "2.25rem",
 									}}
 								/>
-								<p className="text-[10px] mt-1" style={{ color: "rgba(255,255,255,0.25)" }}>
+								<p
+									className="text-[10px] mt-1"
+									style={{ color: "rgba(255,255,255,0.25)" }}
+								>
 									Email cannot be changed
 								</p>
 							</Field>
@@ -313,7 +377,8 @@ const Profile = () => {
 								disabled={savingProfile}
 								className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-white transition-all disabled:opacity-60"
 								style={{
-									background: "linear-gradient(135deg, #6c63ff, #4f46e5)",
+									background:
+										"linear-gradient(135deg, #6c63ff, #4f46e5)",
 								}}
 							>
 								{savingProfile ? (
@@ -336,14 +401,20 @@ const Profile = () => {
 						title="Change Password"
 						subtitle="Use a strong password at least 6 characters long."
 					>
-						<form onSubmit={handlePasswordSave} className="space-y-4">
+						<form
+							onSubmit={handlePasswordSave}
+							className="space-y-4"
+						>
 							<Field label="Current Password" icon={KeyIcon}>
 								<Input
 									icon
 									type="password"
 									value={passwordForm.currentPassword}
 									onChange={(e) =>
-										setPasswordForm({ ...passwordForm, currentPassword: e.target.value })
+										setPasswordForm({
+											...passwordForm,
+											currentPassword: e.target.value,
+										})
 									}
 									placeholder="••••••••"
 									required
@@ -357,21 +428,30 @@ const Profile = () => {
 									value={passwordForm.newPassword}
 									onChange={(e) => {
 										setPasswordError("");
-										setPasswordForm({ ...passwordForm, newPassword: e.target.value });
+										setPasswordForm({
+											...passwordForm,
+											newPassword: e.target.value,
+										});
 									}}
 									placeholder="••••••••"
 									required
 								/>
 							</Field>
 
-							<Field label="Confirm New Password" icon={ShieldIcon}>
+							<Field
+								label="Confirm New Password"
+								icon={ShieldIcon}
+							>
 								<Input
 									icon
 									type="password"
 									value={passwordForm.confirmPassword}
 									onChange={(e) => {
 										setPasswordError("");
-										setPasswordForm({ ...passwordForm, confirmPassword: e.target.value });
+										setPasswordForm({
+											...passwordForm,
+											confirmPassword: e.target.value,
+										});
 									}}
 									placeholder="••••••••"
 									required
@@ -396,7 +476,10 @@ const Profile = () => {
 								type="submit"
 								disabled={savingPassword}
 								className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-white transition-all disabled:opacity-60"
-								style={{ background: "linear-gradient(135deg, #6c63ff, #4f46e5)" }}
+								style={{
+									background:
+										"linear-gradient(135deg, #6c63ff, #4f46e5)",
+								}}
 							>
 								{savingPassword ? (
 									<>
@@ -425,11 +508,15 @@ const Profile = () => {
 								<div
 									key={r._id}
 									className="flex items-center gap-3 p-3 rounded-xl transition-colors"
-									style={{ background: "rgba(255,255,255,0.03)" }}
+									style={{
+										background: "rgba(255,255,255,0.03)",
+									}}
 								>
 									<span
 										className="text-xs font-bold w-5 text-center flex-shrink-0"
-										style={{ color: "rgba(255,255,255,0.2)" }}
+										style={{
+											color: "rgba(255,255,255,0.2)",
+										}}
 									>
 										{i + 1}
 									</span>
@@ -438,25 +525,41 @@ const Profile = () => {
 											src={r.favicon}
 											alt=""
 											className="w-5 h-5 object-contain flex-shrink-0"
-											onError={(e) => (e.target.style.display = "none")}
+											onError={(e) =>
+												(e.target.style.display =
+													"none")
+											}
 										/>
 									) : (
 										<div
 											className="w-5 h-5 rounded flex items-center justify-center text-[9px] font-bold flex-shrink-0"
-											style={{ background: "rgba(108,99,255,0.2)", color: "#6c63ff" }}
+											style={{
+												background:
+													"rgba(108,99,255,0.2)",
+												color: "#6c63ff",
+											}}
 										>
 											{r.title?.slice(0, 2).toUpperCase()}
 										</div>
 									)}
 									<div className="flex-1 min-w-0">
-										<p className="text-sm font-medium text-white truncate">{r.title}</p>
-										<p className="text-[10px] truncate" style={{ color: "rgba(255,255,255,0.3)" }}>
+										<p className="text-sm font-medium text-white truncate">
+											{r.title}
+										</p>
+										<p
+											className="text-[10px] truncate"
+											style={{
+												color: "rgba(255,255,255,0.3)",
+											}}
+										>
 											{r.url}
 										</p>
 									</div>
 									<div
 										className="flex items-center gap-1 text-xs flex-shrink-0"
-										style={{ color: "rgba(255,255,255,0.3)" }}
+										style={{
+											color: "rgba(255,255,255,0.3)",
+										}}
 									>
 										<EyeIcon size={11} />
 										{r.visitCount || 0}
@@ -468,7 +571,10 @@ const Profile = () => {
 				)}
 
 				{/* ── Danger zone ── */}
-				<Section title="Danger Zone" subtitle="Irreversible account actions.">
+				<Section
+					title="Danger Zone"
+					subtitle="Irreversible account actions."
+				>
 					<div
 						className="flex items-center justify-between p-4 rounded-xl border"
 						style={{
@@ -477,13 +583,23 @@ const Profile = () => {
 						}}
 					>
 						<div>
-							<p className="text-sm font-medium text-white">Delete Account</p>
-							<p className="text-xs mt-0.5" style={{ color: "rgba(255,255,255,0.35)" }}>
-								Permanently delete your account and all resources.
+							<p className="text-sm font-medium text-white">
+								Delete Account
+							</p>
+							<p
+								className="text-xs mt-0.5"
+								style={{ color: "rgba(255,255,255,0.35)" }}
+							>
+								Permanently delete your account and all
+								resources.
 							</p>
 						</div>
 						<button
-							onClick={() => toast.error("Contact support to delete your account.")}
+							onClick={() =>
+								toast.error(
+									"Contact support to delete your account.",
+								)
+							}
 							className="px-4 py-2 rounded-xl text-sm font-medium transition-all flex-shrink-0"
 							style={{
 								background: "rgba(239,68,68,0.1)",
@@ -495,7 +611,6 @@ const Profile = () => {
 						</button>
 					</div>
 				</Section>
-
 			</div>
 		</>
 	);

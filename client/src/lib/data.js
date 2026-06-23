@@ -5,7 +5,7 @@ const metadata = {
 		"All your developer resources. Organized. Accessible. Powered by AI.",
 	keywords: "",
 	liveLink: "https://r4-hub.vercel.app/",
-	image: "https://raw.githubusercontent.com/keithowino/tassia_connect/refs/heads/main/client/public/display.png",
+	image: "https://raw.githubusercontent.com/keithowino/r4-hub/refs/heads/main/client/public/screenshot-desktop.jpeg",
 	author: "Pickaxe & Shovel team",
 	parentCompany: {
 		name: "Pickaxe & Shovel",
@@ -15,7 +15,7 @@ const metadata = {
 
 // Social media sharing metadata
 const social = {
-	twitter: "@r4hub",
+	twitterHandle: "@r4hub",
 	facebook: "r4hub",
 	instagram: "r4.hub",
 };

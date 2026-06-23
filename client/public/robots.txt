@@ -1,0 +1,12 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://r4-hub.vercel.app/sitemap.xml
+
+# Disallow admin/private routes
+Disallow: /overview/
+Disallow: /api/
+Disallow: /login
+Disallow: /register

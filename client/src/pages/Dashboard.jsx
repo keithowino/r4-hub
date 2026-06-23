@@ -6,6 +6,7 @@ import QuickAccess from "../components/dashboard/QuickAccess";
 import ResourceFilters from "../components/dashboard/ResourceFilters";
 import ResourceGrid from "../components/dashboard/ResourceGrid";
 import AddResourceModal from "../components/common/modals/AddResourceModal";
+import MetaDataInsert from "../lib/MetaDataInsert";
 
 const Dashboard = () => {
 	const { user } = useAuth();
@@ -56,35 +57,46 @@ const Dashboard = () => {
 	});
 
 	return (
-		<div className="max-w-full">
-			{/* Search */}
-			<div className="mb-8">
-				<SearchBar value={searchTerm} onChange={setSearchTerm} />
+		<>
+			<MetaDataInsert
+				title={`Dashboard - R4 Hub`}
+				description={`Manage your developer resources, favorites, and categories. Welcome back${user?.name ? `, ${user.name}` : "Pioneer"}!`}
+				noIndex={true} // Dashboard is private
+			/>
+
+			<div className="max-w-full">
+				{/* Search */}
+				<div className="mb-8">
+					<SearchBar value={searchTerm} onChange={setSearchTerm} />
+				</div>
+
+				{/* Quick Access */}
+				<QuickAccess
+					resources={sortedResources}
+					onVisit={incrementVisit}
+				/>
+
+				{/* Filters */}
+				<ResourceFilters
+					selectedFilter={selectedFilter}
+					onFilterChange={setSelectedFilter}
+					viewMode={viewMode}
+					onViewModeChange={setViewMode}
+					sortBy={sortBy}
+					onSortChange={setSortBy}
+				/>
+
+				{/* Resource Grid */}
+				<ResourceGrid
+					resources={sortedResources}
+					onFavorite={toggleFavorite}
+					onDelete={deleteResource}
+					onVisit={incrementVisit}
+					viewMode={viewMode}
+					isLoading={isLoading}
+				/>
 			</div>
-
-			{/* Quick Access */}
-			<QuickAccess resources={sortedResources} onVisit={incrementVisit} />
-
-			{/* Filters */}
-			<ResourceFilters
-				selectedFilter={selectedFilter}
-				onFilterChange={setSelectedFilter}
-				viewMode={viewMode}
-				onViewModeChange={setViewMode}
-				sortBy={sortBy}
-				onSortChange={setSortBy}
-			/>
-
-			{/* Resource Grid */}
-			<ResourceGrid
-				resources={sortedResources}
-				onFavorite={toggleFavorite}
-				onDelete={deleteResource}
-				onVisit={incrementVisit}
-				viewMode={viewMode}
-				isLoading={isLoading}
-			/>
-		</div>
+		</>
 	);
 };
 

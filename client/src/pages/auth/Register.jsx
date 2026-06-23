@@ -56,7 +56,11 @@ const Register = () => {
 
 	return (
 		<>
-			<MetaDataInsert title="Create Account" />
+			<MetaDataInsert
+				title="Create Account - R4 Hub"
+				description="Create your free R4 Hub account and start organizing your developer resources today."
+				noIndex={true}
+			/>
 
 			<div className="relative container mx-auto min-h-screen flex flex-col items-center justify-center bg-[#0d0f14] overflow-hidden">
 				{/* Background grid */}

@@ -52,6 +52,23 @@ export default defineConfig(() => {
 			react(),
 			sitemap({
 				hostname: "https://r4-hub.vercel.app/",
+				dynamicRoutes: [
+					"/",
+					"/login",
+					"/register",
+					"/overview",
+					"/overview/favorites",
+					"/overview/categories",
+					"/overview/resources",
+					"/overview/ai-tools",
+					"/overview/platforms",
+					"/overview/cloud",
+					"/overview/dev-tools",
+				],
+				exclude: ["/overview/*"], // Will handle dynamic routes differently
+				outDir: "dist",
+				changefreq: "weekly",
+				priority: 0.8,
 			}),
 		],
 	};

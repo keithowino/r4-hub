@@ -32,7 +32,11 @@ const Login = () => {
 
 	return (
 		<>
-			<MetaDataInsert title="Sign In" />
+			<MetaDataInsert
+				title="Sign In - R4 Hub"
+				description="Sign in to your R4 Hub account and access all your organized developer resources."
+				noIndex={true}
+			/>
 
 			<div className="relative container mx-auto min-h-screen flex flex-col items-center justify-center bg-[#0d0f14] overflow-hidden">
 				<div style={styles.grid} aria-hidden="true" />

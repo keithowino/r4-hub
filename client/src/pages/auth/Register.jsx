@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../lib/context/AuthContext.jsx";
 import MetaDataInsert from "../../lib/MetaDataInsert.jsx";
 import { useCommon } from "../../lib/context/CommonContext.jsx";
+import { trackRegistration } from "../../lib/services/analyticsService.js";
 
 const Register = () => {
 	const { styles } = useCommon();
@@ -44,6 +45,7 @@ const Register = () => {
 				email: formData.email,
 				password: formData.password,
 			});
+			trackRegistration("email");
 			navigate("/dashboard");
 		} catch {
 			// error is already set in AuthContext
@@ -57,7 +59,7 @@ const Register = () => {
 	return (
 		<>
 			<MetaDataInsert
-				title="Create Account - R4 Hub"
+				title="Create Account"
 				description="Create your free R4 Hub account and start organizing your developer resources today."
 				noIndex={true}
 			/>

@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../lib/context/AuthContext.jsx";
 import MetaDataInsert from "../../lib/MetaDataInsert.jsx";
 import { useCommon } from "../../lib/context/CommonContext.jsx";
+import { trackLogin } from "../../lib/services/analyticsService.js";
 
 const Login = () => {
 	const { login, error, clearError } = useAuth();
@@ -22,6 +23,7 @@ const Login = () => {
 		setIsSubmitting(true);
 		try {
 			await login({ email: formData.email, password: formData.password });
+			trackLogin("email");
 			navigate("/overview");
 		} catch {
 			// error is already set in AuthContext
@@ -33,7 +35,7 @@ const Login = () => {
 	return (
 		<>
 			<MetaDataInsert
-				title="Sign In - R4 Hub"
+				title="Sign In"
 				description="Sign in to your R4 Hub account and access all your organized developer resources."
 				noIndex={true}
 			/>

@@ -18,7 +18,7 @@ const Favorites = () => {
 	return (
 		<>
 			<MetaDataInsert
-				title="Favorites - R4 Hub"
+				title="Favorites"
 				description="Your favorite developer resources, always accessible. Star resources to add them to your favorites."
 				noIndex={true}
 			/>

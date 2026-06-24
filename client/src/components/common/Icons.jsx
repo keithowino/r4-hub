@@ -16,7 +16,8 @@ export const RIcon = ({ c, md = "9", imgd = "3", resource }) => {
 			{resource.favicon && !imgErr ? (
 				<img
 					src={resource.favicon}
-					alt=""
+					loading="lazy"
+					alt="R4 Hub Resource"
 					className={`w-${imgd} h-${imgd} object-contain`}
 					// className={`w-${md} h-${md} object-contain`}
 					onError={() => setImgErr(true)}

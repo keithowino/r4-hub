@@ -21,7 +21,7 @@ const Categories = () => {
 	return (
 		<>
 			<MetaDataInsert
-				title="Categories - R4 Hub"
+				title="Categories"
 				description="Browse and organize your developer resources by category. From AI Tools to Databases, find what you need instantly."
 				noIndex={true}
 			/>

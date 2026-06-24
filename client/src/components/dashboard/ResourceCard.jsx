@@ -10,6 +10,11 @@ import {
 } from "lucide-react";
 import { toast } from "react-toastify";
 import { RIcon } from "../common/Icons";
+import {
+	trackFavoriteToggle,
+	trackResourceDeleted,
+	trackResourceVisit,
+} from "../../lib/services/analyticsService";
 
 // Category color map — matches the mockup palette
 const CAT_COLORS = {
@@ -168,19 +173,23 @@ const VisitCount = ({ r }) => {
 
 const Actions = ({
 	view,
-	onFavorite,
+	// onFavorite,
+	handleFavorite,
 	id,
 	resource,
-	onVisit,
+	// onVisit,
+	handleVisit,
 	onEdit,
 	onArchive,
-	onDelete,
+	// onDelete,
+	handleDelete,
 }) => {
 	return (
 		<div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
 			{view === "list" && (
 				<button
-					onClick={() => onFavorite?.(id)}
+					// onClick={() => onFavorite?.(id)}
+					onClick={handleFavorite}
 					className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
 					style={{
 						color: resource.favorite
@@ -198,7 +207,8 @@ const Actions = ({
 				href={resource.url}
 				target="_blank"
 				rel="noopener noreferrer"
-				onClick={() => onVisit?.(id)}
+				// onClick={() => onVisit?.(id)}
+				onClick={handleVisit}
 				className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
 				style={{ color: "rgba(255,255,255,0.4)" }}
 				title="Open"
@@ -234,7 +244,8 @@ const Actions = ({
 				</button>
 			)}
 			<button
-				onClick={() => onDelete?.(id)}
+				// onClick={() => onDelete?.(id)}
+				onClick={handleDelete}
 				className="p-1.5 rounded-lg hover:bg-red-500/10 transition-colors"
 				style={{ color: "rgba(255,255,255,0.4)" }}
 				title="Delete"
@@ -259,6 +270,24 @@ const GridCard = ({
 	const id = resource._id || resource.id;
 	const c = getCat(resource.category);
 	const tags = Array.isArray(resource.tags) ? resource.tags : [];
+
+	const handleVisit = () => {
+		trackResourceVisit(resource.title, resource.category);
+		onVisit(id);
+		window.open(resource.url, "_blank");
+		console.log("It's a drill");
+	};
+
+	const handleFavorite = () => {
+		const newState = !resource.favorite;
+		trackFavoriteToggle(resource.category, newState);
+		onFavorite(id);
+	};
+
+	const handleDelete = () => {
+		trackResourceDeleted(resource.category);
+		onDelete(resource.id);
+	};
 
 	return (
 		<motion.div
@@ -288,7 +317,8 @@ const GridCard = ({
 
 					{/* Star */}
 					<button
-						onClick={() => onFavorite?.(id)}
+						// onClick={() => onFavorite?.(id)}
+						onClick={handleFavorite}
 						className="p-1 rounded-lg transition-colors"
 						style={{
 							color: resource.favorite
@@ -338,10 +368,12 @@ const GridCard = ({
 						onFavorite={onFavorite}
 						id={id}
 						resource={resource}
-						onVisit={onVisit}
+						// onVisit={onVisit}
+						handleVisit={handleVisit}
 						onEdit={onEdit}
 						onArchive={onArchive}
-						onDelete={onDelete}
+						// onDelete={onDelete}
+						handleDelete={handleDelete}
 					/>
 				</div>
 			</div>
@@ -363,6 +395,24 @@ const ListCard = ({
 	const id = resource._id || resource.id;
 	const c = getCat(resource.category);
 	const tags = Array.isArray(resource.tags) ? resource.tags : [];
+
+	const handleVisit = () => {
+		trackResourceVisit(resource.title, resource.category);
+		onVisit(id);
+		window.open(resource.url, "_blank");
+	};
+
+	const handleFavorite = () => {
+		const newState = !resource.favorite;
+		trackFavoriteToggle(resource.category, newState);
+		onFavorite(id);
+		console.log("List fav drill");
+	};
+
+	const handleDelete = () => {
+		trackResourceDeleted(resource.category);
+		onDelete(id);
+	};
 
 	return (
 		<motion.div
@@ -394,13 +444,16 @@ const ListCard = ({
 
 			<Actions
 				view={viewMode}
-				onFavorite={onFavorite}
+				// onFavorite={onFavorite}
+				handleFavorite={handleFavorite}
 				id={id}
 				resource={resource}
-				onVisit={onVisit}
+				// onVisit={onVisit}
+				handleVisit={handleVisit}
 				onEdit={onEdit}
 				onArchive={onArchive}
-				onDelete={onDelete}
+				// onDelete={onDelete}
+				handleDelete={handleDelete}
 			/>
 		</motion.div>
 	);

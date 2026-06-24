@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { toast } from "react-toastify";
 import { useCommon } from "../../../lib/context/CommonContext";
+import { trackResourceCreated } from "../../../lib/services/analyticsService";
 
 const AddResourceModal = ({
 	isOpen,
@@ -142,6 +143,10 @@ const AddResourceModal = ({
 			};
 
 			await onSave(resourceData);
+			trackResourceCreated(
+				resourceData.category,
+				resourceData.tags.length,
+			);
 			onClose();
 		} catch (error) {
 			console.error("Error saving resource:", error);

@@ -1,8 +1,10 @@
+import { lazy, Suspense, useEffect } from "react";
 import {
 	BrowserRouter as Router,
 	Routes,
 	Route,
 	Navigate,
+	useLocation,
 } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { ToastContainer } from "react-toastify";
@@ -12,15 +14,17 @@ import { CommonContextProvider } from "./lib/context/CommonContext.jsx";
 import ProtectedRoute, {
 	PublicOnlyRoute,
 } from "./components/common/ProtectedRoute.jsx";
-import Home from "./pages/Home.jsx";
-import Login from "./pages/auth/Login.jsx";
-import Register from "./pages/auth/Register.jsx";
-import Dashboard from "./pages/Dashboard.jsx";
 import MainLayout from "./components/Layout";
-import Favorites from "./pages/Favorites";
-import Categories from "./pages/Categories";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import Profile from "./pages/Profile.jsx";
+import { trackPageView } from "./lib/services/analyticsService.js";
+
+const Home = lazy(() => import("./pages/Home"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const Favorites = lazy(() => import("./pages/Favorites"));
+const Categories = lazy(() => import("./pages/Categories"));
+const Login = lazy(() => import("./pages/auth/Login"));
+const Register = lazy(() => import("./pages/auth/Register"));
+const Profile = lazy(() => import("./pages/Profile"));
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -31,47 +35,59 @@ const queryClient = new QueryClient({
 	},
 });
 
+// Loading fallback component
+const PageLoader = () => (
+	<div className="min-h-screen flex items-center justify-center bg-[#0d0f14]">
+		<div className="text-center">
+			<div className="spinner mx-auto mb-4" />
+			<p className="text-[#3a4260] text-sm">Loading...</p>
+		</div>
+	</div>
+);
+
+const PageTracker = () => {
+	const location = useLocation();
+
+	useEffect(() => {
+		// Track page view on route change
+		trackPageView(location.pathname, document.title);
+	}, [location]);
+
+	return null;
+};
+
 const AppRoutes = () => {
 	return (
-		<Routes>
-			{/* Public landing page */}
-			<Route path="/" element={<Home />} />
-			<Route
-				path="profile"
-				element={
-					<ProtectedRoute>
-						<Profile />
-					</ProtectedRoute>
-				}
-			/>
+		<Suspense fallback={<PageLoader />}>
+			<Routes>
+				{/* Public landing page */}
+				<Route path="/" element={<Home />} />
 
-			{/* Public only — redirect to dashboard if already logged in */}
-			<Route element={<PublicOnlyRoute />}>
-				<Route path="/login" element={<Login />} />
-				<Route path="/register" element={<Register />} />
-			</Route>
+				{/* Public only — redirect to dashboard if already logged in */}
+				<Route element={<PublicOnlyRoute />}>
+					<Route path="/login" element={<Login />} />
+					<Route path="/register" element={<Register />} />
+				</Route>
 
-			<Route
-				path="/overview"
-				element={
-					<ProtectedRoute>
-						<MainLayout />
-					</ProtectedRoute>
-				}
-			>
-				<Route index element={<Dashboard />} />
-				<Route path="favorites" element={<Favorites />} />
-				<Route path="categories" element={<Categories />} />
-				<Route path="ai-tools" element={<Dashboard />} />
-				<Route path="platforms" element={<Dashboard />} />
-				<Route path="cloud" element={<Dashboard />} />
-				<Route path="dev-tools" element={<Dashboard />} />
-				<Route path="resources" element={<Dashboard />} />
-			</Route>
+				{/* Protected routes */}
+				<Route element={<ProtectedRoute />}>
+					<Route path="/profile" element={<Profile />} />
+					<Route path="/overview" element={<MainLayout />}>
+						<Route index element={<Dashboard />} />
+						<Route path="favorites" element={<Favorites />} />
+						<Route path="categories" element={<Categories />} />
+						<Route path="ai-tools" element={<Dashboard />} />
+						<Route path="platforms" element={<Dashboard />} />
+						<Route path="cloud" element={<Dashboard />} />
+						<Route path="dev-tools" element={<Dashboard />} />
+						<Route path="resources" element={<Dashboard />} />
+					</Route>
+				</Route>
 
-			{/* Catch-all */}
-			<Route path="*" element={<Navigate to="/" replace />} />
-		</Routes>
+				{/* Catch-all */}
+				<Route path="*" element={<Navigate to="/" replace />} />
+			</Routes>
+		</Suspense>
 	);
 };
 
@@ -82,6 +98,7 @@ const App = () => {
 				<CommonContextProvider>
 					<AuthContextProvider>
 						<Router>
+							<PageTracker />
 							<AppRoutes />
 							<ToastContainer
 								position="bottom-right"

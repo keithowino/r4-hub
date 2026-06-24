@@ -16,9 +16,7 @@ const AuthLoader = () => (
 	</div>
 );
 
-// Wraps private routes — redirects to /login if not authenticated
-const ProtectedRoute = ({ children }) => {
-	// ← Accept children prop
+const ProtectedRoute = () => {
 	const { isAuthenticated, loading } = useAuth();
 	const location = useLocation();
 
@@ -28,7 +26,7 @@ const ProtectedRoute = ({ children }) => {
 		return <Navigate to="/login" state={{ from: location }} replace />;
 	}
 
-	return children; // ← Return children instead of Outlet
+	return <Outlet />;
 };
 
 export const PublicOnlyRoute = () => {

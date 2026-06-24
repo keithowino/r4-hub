@@ -42,11 +42,12 @@ const stack = [
 const Home = () => {
 	const { isAuthenticated } = useAuth();
 	const { styles } = useCommon();
+	const { metadata } = data;
 
 	return (
 		<>
 			<MetaDataInsert
-				title="R4 Hub - All Your Developer Resources, Organized"
+				title={metadata.name}
 				description="The ultimate developer resource management platform. Organize, save, and quickly access all your developer tools, AI platforms, documentation, and learning resources in one centralized hub."
 				keywords="developer tools, resource management, AI tools, dev resources, bookmark manager, developer dashboard"
 				url="https://r4-hub.vercel.app"

@@ -210,7 +210,7 @@ const Profile = () => {
 	return (
 		<>
 			<MetaDataInsert
-				title={`${user?.name ? user.name : "User"} Profile`}
+				title={`${user?.name ? user.name.split(" ")[0] + "'s" : "User"} profile`}
 				description="Start organizing your developer resources today."
 				noIndex={true}
 			/>

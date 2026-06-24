@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
+import compression from "compression";
 import path from "path";
 import resourceRoutes from "./routes/resourceRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
@@ -40,14 +41,34 @@ console.log(`Loading environment from: ${envFile}`);
 const app = express();
 
 // Middleware
+// // ✅ Add compression middleware (BEFORE routes)
+// app.use(compression());
 app.use(
 	cors({
 		origin: process.env.CLIENT_URL || "http://localhost:3000",
 		credentials: true,
 	}),
 );
+// ✅ Static file caching (for production)
+// This tells browsers to cache static files for 1 year
+// Files with different names (hash in filename) will be downloaded fresh
+// app.use(
+// 	express.static("public", {
+// 		maxAge: "1y",
+// 		immutable: true,
+// 	}),
+// );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+// // ✅ API response caching (optional)
+// // Cache resource list for 5 minutes
+// app.use("/api/resources", (req, res, next) => {
+// 	// Only cache GET requests
+// 	if (req.method === "GET") {
+// 		res.set("Cache-Control", "public, max-age=300"); // 5 minutes
+// 	}
+// 	next();
+// });
 
 // Routes
 app.use("/api/auth", authRoutes);

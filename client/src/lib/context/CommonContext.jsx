@@ -252,9 +252,15 @@ export const CommonContextProvider = ({ children }) => {
 			padding: "4px 8px",
 			fontSize: "14px",
 		},
+		// body: {
+		// 	display: "grid",
+		// 	gridTemplateColumns: "196px 1fr 220px",
+		// 	flex: 1,
+		// 	overflow: "hidden",
+		// },
 		body: {
-			display: "grid",
-			gridTemplateColumns: "196px 1fr 220px",
+			// Old fixed grid removed
+			display: "flex",
 			flex: 1,
 			overflow: "hidden",
 		},

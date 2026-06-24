@@ -1,4 +1,17 @@
-## 📊 Analytics Dashboard - What to Look For Key Metrics to Monitor
+## Monitor SEO Performance
+
+| **Tool**                  | **Purpose**                     |
+| ------------------------- | ------------------------------- |
+| **Google Search Console** | Search performance, indexing    |
+| **Google Analytics**      | User behavior, traffic          |
+| **Lighthouse**            | Performance, accessibility, SEO |
+| **Ahrefs/SEMrush**        | Keyword rankings, backlinks     |
+| **GTmetrix**              | Page speed analysis             |
+| **PageSpeed Insights**    | Core Web Vitals                 |
+
+---
+
+### 📊 Analytics Dashboard - What to Look For Key Metrics to Monitor
 
 | **Metric**               | **What It Tells You**        | **Action**         |
 | ------------------------ | ---------------------------- | ------------------ |
@@ -13,7 +26,7 @@
 
 ---
 
-## Event Tracking Summary
+### Event Tracking Summary
 
 | **Event**             | **When It Fires**     | **What It Tells You** |
 | --------------------- | --------------------- | --------------------- |
@@ -25,3 +38,33 @@
 | **search**            | User performs search  | Content needs         |
 | **visit_resource**    | User opens resource   | Most-used resources   |
 | **error**             | Error occurs          | UX issues             |
+
+---
+
+### SEO Checklist
+
+```markdown
+#### Daily
+
+- [ ] Check Google Search Console for errors
+- [ ] Monitor 404 errors
+
+#### Weekly
+
+- [ ] Review keyword rankings
+- [ ] Check backlink profile
+- [ ] Monitor Core Web Vitals
+
+#### Monthly
+
+- [ ] Update sitemap (if new pages added)
+- [ ] Review GA4 analytics
+- [ ] Audit broken links
+- [ ] Check competitors
+
+#### Quarterly
+
+- [ ] Full SEO audit
+- [ ] Content performance review
+- [ ] Update meta tags as needed
+```

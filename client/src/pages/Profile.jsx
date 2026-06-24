@@ -1,6 +1,29 @@
+// import { useState } from "react";
+// import { useAuth } from "../lib/context/AuthContext.jsx";
+// import { useResources } from "../hooks/useResources.js";
+// import MetaDataInsert from "../lib/MetaDataInsert.jsx";
+// import {
+// 	UserIcon,
+// 	MailIcon,
+// 	ShieldIcon,
+// 	SaveIcon,
+// 	KeyIcon,
+// 	DatabaseIcon,
+// 	StarIcon,
+// 	TagIcon,
+// 	FolderIcon,
+// 	CalendarIcon,
+// 	EyeIcon,
+// 	CheckIcon,
+// 	AlertCircleIcon,
+// } from "lucide-react";
+// import { toast } from "react-toastify";
+// import { motion } from "framer-motion";
+
 import { useState } from "react";
 import { useAuth } from "../lib/context/AuthContext.jsx";
 import { useResources } from "../hooks/useResources.js";
+import { useNavigate, useLocation } from "react-router-dom";
 import MetaDataInsert from "../lib/MetaDataInsert.jsx";
 import {
 	UserIcon,
@@ -16,6 +39,7 @@ import {
 	EyeIcon,
 	CheckIcon,
 	AlertCircleIcon,
+	ArrowLeft,
 } from "lucide-react";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
@@ -119,6 +143,16 @@ const Input = ({ icon, ...props }) => (
 const Profile = () => {
 	const { user, updateMe, changePassword } = useAuth();
 	const { resources = [] } = useResources();
+	const navigate = useNavigate();
+	const location = useLocation();
+
+	const goBack = () => {
+		if (location.state?.from) {
+			navigate(location.state.from);
+		} else {
+			navigate(-1); // Fallback to browser history
+		}
+	};
 
 	const [profileForm, setProfileForm] = useState({
 		name: user?.name || "",
@@ -209,20 +243,47 @@ const Profile = () => {
 
 	return (
 		<>
-			<MetaDataInsert
+			{/* <MetaDataInsert
 				title={`${user?.name ? user.name.split(" ")[0] + "'s" : "User"} profile`}
 				description="Start organizing your developer resources today."
 				noIndex={true}
 			/>
 
-			<div className="max-w-4xl mx-auto px-4 py-8 space-y-6">
+			<div className="max-w-4xl mx-auto px-4 py-8 space-y-6"> */}
+			<MetaDataInsert
+				title={`${user?.name ? user.name.split(" ")[0] + "'s" : "User"} Profile`}
+				description="Start organizing your developer resources today."
+				noIndex={true}
+			/>
+
+			<div className="max-w-5xl mx-auto px-4 py-6 md:py-10 space-y-6">
+				{/* Back Button */}
+				<button
+					onClick={goBack}
+					className="flex items-center gap-2 text-gray-400 hover:text-white mb-6 group"
+				>
+					<ArrowLeft
+						size={18}
+						className="group-hover:-translate-x-0.5 transition"
+					/>
+					<span className="text-sm">Back</span>
+				</button>
 				{/* ── Hero card ── */}
-				<motion.div
+				{/* <motion.div
 					initial={{ opacity: 0, y: 16 }}
 					animate={{ opacity: 1, y: 0 }}
 					className="relative rounded-2xl border overflow-hidden"
 					style={{
 						background: "rgba(22,25,32,0.9)",
+						borderColor: "rgba(255,255,255,0.06)",
+					}}
+				> */}
+				<motion.div
+					initial={{ opacity: 0, y: 16 }}
+					animate={{ opacity: 1, y: 0 }}
+					className="rounded-3xl border overflow-hidden mb-8"
+					style={{
+						background: "rgba(22,25,32,0.95)",
 						borderColor: "rgba(255,255,255,0.06)",
 					}}
 				>
@@ -298,7 +359,8 @@ const Profile = () => {
 				</motion.div>
 
 				{/* ── Stats row ── */}
-				<div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+				{/* <div className="grid grid-cols-2 md:grid-cols-4 gap-3"> */}
+				<div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
 					<StatCard
 						icon={DatabaseIcon}
 						label="Resources"
@@ -503,7 +565,8 @@ const Profile = () => {
 						title="Most Visited Resources"
 						subtitle="Your most accessed links across all sessions."
 					>
-						<div className="space-y-2">
+						{/* <div className="space-y-2"> */}
+						<div className="grid grid-cols-1 md:grid-cols-2 gap-3">
 							{topResources.map((r, i) => (
 								<div
 									key={r._id}

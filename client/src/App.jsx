@@ -17,6 +17,7 @@ import ProtectedRoute, {
 import MainLayout from "./components/Layout";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { trackPageView } from "./lib/services/analyticsService.js";
+import SEODashboard from "./pages/SEODashboard.jsx";
 
 const Home = lazy(() => import("./pages/Home"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
@@ -72,6 +73,7 @@ const AppRoutes = () => {
 				{/* Protected routes */}
 				<Route element={<ProtectedRoute />}>
 					<Route path="/profile" element={<Profile />} />
+					{/* <Route path="/seo-dashboard" element={<SEODashboard />} /> */}
 					<Route path="/overview" element={<MainLayout />}>
 						<Route index element={<Dashboard />} />
 						<Route path="favorites" element={<Favorites />} />

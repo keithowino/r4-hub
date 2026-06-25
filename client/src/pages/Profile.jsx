@@ -1,25 +1,3 @@
-// import { useState } from "react";
-// import { useAuth } from "../lib/context/AuthContext.jsx";
-// import { useResources } from "../hooks/useResources.js";
-// import MetaDataInsert from "../lib/MetaDataInsert.jsx";
-// import {
-// 	UserIcon,
-// 	MailIcon,
-// 	ShieldIcon,
-// 	SaveIcon,
-// 	KeyIcon,
-// 	DatabaseIcon,
-// 	StarIcon,
-// 	TagIcon,
-// 	FolderIcon,
-// 	CalendarIcon,
-// 	EyeIcon,
-// 	CheckIcon,
-// 	AlertCircleIcon,
-// } from "lucide-react";
-// import { toast } from "react-toastify";
-// import { motion } from "framer-motion";
-
 import { useState } from "react";
 import { useAuth } from "../lib/context/AuthContext.jsx";
 import { useResources } from "../hooks/useResources.js";
@@ -243,13 +221,6 @@ const Profile = () => {
 
 	return (
 		<>
-			{/* <MetaDataInsert
-				title={`${user?.name ? user.name.split(" ")[0] + "'s" : "User"} profile`}
-				description="Start organizing your developer resources today."
-				noIndex={true}
-			/>
-
-			<div className="max-w-4xl mx-auto px-4 py-8 space-y-6"> */}
 			<MetaDataInsert
 				title={`${user?.name ? user.name.split(" ")[0] + "'s" : "User"} Profile`}
 				description="Start organizing your developer resources today."
@@ -269,19 +240,10 @@ const Profile = () => {
 					<span className="text-sm">Back</span>
 				</button>
 				{/* ── Hero card ── */}
-				{/* <motion.div
-					initial={{ opacity: 0, y: 16 }}
-					animate={{ opacity: 1, y: 0 }}
-					className="relative rounded-2xl border overflow-hidden"
-					style={{
-						background: "rgba(22,25,32,0.9)",
-						borderColor: "rgba(255,255,255,0.06)",
-					}}
-				> */}
 				<motion.div
 					initial={{ opacity: 0, y: 16 }}
 					animate={{ opacity: 1, y: 0 }}
-					className="rounded-3xl border overflow-hidden mb-8"
+					className="relative rounded-3xl border overflow-hidden mb-8"
 					style={{
 						background: "rgba(22,25,32,0.95)",
 						borderColor: "rgba(255,255,255,0.06)",
@@ -289,7 +251,7 @@ const Profile = () => {
 				>
 					{/* Banner */}
 					<div
-						className="h-24"
+						className="h-28 md:h-32"
 						style={{
 							background:
 								"linear-gradient(135deg, rgba(108,99,255,0.4) 0%, rgba(59,130,246,0.3) 50%, rgba(168,85,247,0.3) 100%)",
@@ -298,16 +260,47 @@ const Profile = () => {
 
 					<div className="px-6 pb-6">
 						{/* Avatar */}
-						<div className="flex items-end justify-between -mt-8 mb-4">
+						<div className="-mt-12 md:-mt-16 mb-6 flex flex-col sm:flex-row sm:items-end gap-4">
 							<div
-								className="w-16 h-16 rounded-2xl flex items-center justify-center text-xl font-bold text-white border-2 flex-shrink-0"
+								className="w-20 h-20 md:w-24 md:h-24 rounded-2xl flex items-center justify-center text-3xl font-bold text-white border-4 border-[#0d0f14]"
 								style={{
 									background:
 										"linear-gradient(135deg, #6c63ff, #3b82f6)",
-									borderColor: "#0d0f14",
 								}}
 							>
 								{initials}
+							</div>
+							<div className="flex-1">
+								<h1 className="text-2xl font-bold text-white">
+									{user?.name}
+								</h1>
+								<p className="text-gray-400">{user?.email}</p>
+							</div>
+						</div>
+
+						<div className="flex flex-wrap gap-4 items-center justify-between">
+							<div className="flex flex-wrap gap-4">
+								<div
+									className="flex items-center gap-1.5 text-xs"
+									style={{ color: "rgba(255,255,255,0.35)" }}
+								>
+									<CalendarIcon size={12} />
+									Member since {memberSince}
+								</div>
+								<div
+									className="flex items-center gap-1.5 text-xs"
+									style={{ color: "rgba(255,255,255,0.35)" }}
+								>
+									<EyeIcon size={12} />
+									{stats.totalVisits} total visits
+								</div>
+								<div
+									className="flex items-center gap-1.5 text-xs"
+									style={{ color: "rgba(255,255,255,0.35)" }}
+								>
+									<ShieldIcon size={12} />
+									{user?.role || "user"}
+								</div>
 							</div>
 							<div
 								className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium"
@@ -319,40 +312,6 @@ const Profile = () => {
 							>
 								<span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block" />
 								Active
-							</div>
-						</div>
-
-						<h1 className="text-xl font-bold text-white mb-0.5">
-							{user?.name}
-						</h1>
-						<p
-							className="text-sm mb-3"
-							style={{ color: "rgba(255,255,255,0.4)" }}
-						>
-							{user?.email}
-						</p>
-
-						<div className="flex flex-wrap gap-4">
-							<div
-								className="flex items-center gap-1.5 text-xs"
-								style={{ color: "rgba(255,255,255,0.35)" }}
-							>
-								<CalendarIcon size={12} />
-								Member since {memberSince}
-							</div>
-							<div
-								className="flex items-center gap-1.5 text-xs"
-								style={{ color: "rgba(255,255,255,0.35)" }}
-							>
-								<EyeIcon size={12} />
-								{stats.totalVisits} total visits
-							</div>
-							<div
-								className="flex items-center gap-1.5 text-xs"
-								style={{ color: "rgba(255,255,255,0.35)" }}
-							>
-								<ShieldIcon size={12} />
-								{user?.role || "user"}
 							</div>
 						</div>
 					</div>
